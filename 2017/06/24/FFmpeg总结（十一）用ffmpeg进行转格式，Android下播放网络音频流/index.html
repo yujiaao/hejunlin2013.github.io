@@ -1,0 +1,954 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="ffmpeg,OpenSL ES," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="思路：1、mp3转成pcm(音频数据)，ffmpeg做的事2、OpenSL ES引擎创建AudioPlayer，实际调用了AudioTrack">
+<meta name="keywords" content="ffmpeg,OpenSL ES">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流">
+<meta property="og:url" content="http://yoursite.com/2017/06/24/FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流/index.html">
+<meta property="og:site_name" content="逆流的鱼yuiop">
+<meta property="og:description" content="思路：1、mp3转成pcm(音频数据)，ffmpeg做的事2、OpenSL ES引擎创建AudioPlayer，实际调用了AudioTrack">
+<meta property="og:image" content="http://yoursite.com/upload/assassin.jpg">
+<meta property="og:image" content="http://img.blog.csdn.net/20170507110911572?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170507104756342?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170507104942030?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170507104526918?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170507110500148?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170507103743452?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-06-24T09:49:55.303Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流">
+<meta name="twitter:description" content="思路：1、mp3转成pcm(音频数据)，ffmpeg做的事2、OpenSL ES引擎创建AudioPlayer，实际调用了AudioTrack">
+<meta name="twitter:image" content="http://yoursite.com/upload/assassin.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/24/FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流/"/>
+
+
+
+
+
+  <title>FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流 | 逆流的鱼yuiop</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">逆流的鱼yuiop</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/24/FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="逆流的鱼yuiop">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/9/5/0/1_hejjunlin.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="逆流的鱼yuiop">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-24T17:44:43+08:00">
+                2017-06-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ffmpeg/" itemprop="url" rel="index">
+                    <span itemprop="name">ffmpeg</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/06/24/FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流/" class="leancloud_visitors" data-flag-title="FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">本文总阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <center><br><img src="/upload/assassin.jpg" alt="这里写图片描述"><br></center>
+
+<p>思路：<br>1、mp3转成pcm(音频数据)，ffmpeg做的事<br>2、OpenSL ES引擎创建AudioPlayer，实际调用了AudioTrack<br><a id="more"></a></p>
+<p>遇到的错误：<br>Error #include nested too deeply<br>原因：c文件互相引用<br>解决方案：</p>
+<ul>
+<li>1、将两个头文件共用的那一部分抽出来单独建一个头文件。</li>
+<li>2、加预处理#ifndef.. #define…#endif</li>
+</ul>
+<p>x86平台没有编译出来so，怀疑存在版本不兼容，编译别的相关so，x86下没有异常。有空这里再更新下原因</p>
+<p><img src="http://img.blog.csdn.net/20170507110911572?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>studio写ndk相当方便：</p>
+<p><img src="http://img.blog.csdn.net/20170507104756342?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p><img src="http://img.blog.csdn.net/20170507104942030?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>工程结构：</p>
+<p><img src="http://img.blog.csdn.net/20170507104526918?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>Java代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.hejunlin.ffmpegaudio;</div><div class="line"></div><div class="line"><span class="keyword">import</span> android.support.v7.app.AppCompatActivity;</div><div class="line"><span class="keyword">import</span> android.os.Bundle;</div><div class="line"><span class="keyword">import</span> android.view.View;</div><div class="line"><span class="keyword">import</span> android.widget.EditText;</div><div class="line"><span class="keyword">import</span> android.widget.TextView;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> EditText mInput;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">        setContentView(R.layout.activity_main);</div><div class="line">        mInput = (EditText) findViewById(R.id.et_input);</div><div class="line">     mInput.setText(<span class="string">"http://qzone.60dj.com/huiyuan/201704/19/201704190533197825_35285.mp3"</span>);</div><div class="line">        findViewById(R.id.bt_play).setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View view)</span> </span>&#123;</div><div class="line">                NativePlayer.play(mInput.getText().toString().trim());</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">        findViewById(R.id.bt_pause).setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View view)</span> </span>&#123;</div><div class="line">                NativePlayer.stop();</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>NativePlayer:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.hejunlin.ffmpegaudio;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by hejunlin on 17/5/6.</div><div class="line"> */</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NativePlayer</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">static</span> &#123;</div><div class="line">        System.loadLibrary(<span class="string">"NativePlayer"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">(String url)</span></span>;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>布局文件：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</div><div class="line"><span class="tag">&lt;<span class="name">RelativeLayout</span></span></div><div class="line">    <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></div><div class="line">    <span class="attr">xmlns:tools</span>=<span class="string">"http://schemas.android.com/tools"</span></div><div class="line">    <span class="attr">android:id</span>=<span class="string">"@+id/activity_main"</span></div><div class="line">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></div><div class="line">    <span class="attr">tools:context</span>=<span class="string">"com.hejunlin.ffmpegaudio.MainActivity"</span>&gt;</div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">        <span class="attr">android:id</span>=<span class="string">"@+id/tv_input"</span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">        <span class="attr">android:padding</span>=<span class="string">"10dp"</span></div><div class="line">        <span class="attr">android:layout_marginTop</span>=<span class="string">"30dp"</span></div><div class="line">        <span class="attr">android:text</span>=<span class="string">"播放链接:"</span></div><div class="line">        <span class="attr">android:textSize</span>=<span class="string">"20sp"</span>/&gt;</div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">EditText</span></span></div><div class="line">        <span class="attr">android:id</span>=<span class="string">"@+id/et_input"</span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">        <span class="attr">android:layout_toRightOf</span>=<span class="string">"@id/tv_input"</span></div><div class="line">        <span class="attr">android:padding</span>=<span class="string">"10dp"</span>/&gt;</div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">LinearLayout</span></span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">        <span class="attr">android:layout_below</span>=<span class="string">"@id/et_input"</span></div><div class="line">        <span class="attr">android:orientation</span>=<span class="string">"horizontal"</span>&gt;</div><div class="line"></div><div class="line"></div><div class="line">        <span class="tag">&lt;<span class="name">Button</span></span></div><div class="line">            <span class="attr">android:id</span>=<span class="string">"@+id/bt_play"</span></div><div class="line">            <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></div><div class="line">            <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">            <span class="attr">android:layout_marginTop</span>=<span class="string">"10dp"</span></div><div class="line">            <span class="attr">android:layout_marginLeft</span>=<span class="string">"60dp"</span></div><div class="line">            <span class="attr">android:background</span>=<span class="string">"@drawable/button_shape"</span></div><div class="line">            <span class="attr">android:textColor</span>=<span class="string">"@color/white"</span></div><div class="line">            <span class="attr">android:text</span>=<span class="string">"播放"</span> /&gt;</div><div class="line"></div><div class="line">        <span class="tag">&lt;<span class="name">Button</span></span></div><div class="line">            <span class="attr">android:id</span>=<span class="string">"@+id/bt_pause"</span></div><div class="line">            <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></div><div class="line">            <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">            <span class="attr">android:layout_marginTop</span>=<span class="string">"10dp"</span></div><div class="line">            <span class="attr">android:background</span>=<span class="string">"@drawable/button_shape"</span></div><div class="line">            <span class="attr">android:textColor</span>=<span class="string">"@color/white"</span></div><div class="line">            <span class="attr">android:layout_marginLeft</span>=<span class="string">"80dp"</span></div><div class="line">            <span class="attr">android:text</span>=<span class="string">"暂停"</span> /&gt;</div><div class="line">    <span class="tag">&lt;/<span class="name">LinearLayout</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">RelativeLayout</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>jni相关代码：<br>OpenSL_ES_Core.c<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">// Created by hejunlin on 17/5/6.</span></div><div class="line"><span class="comment">//</span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"OpenSL_ES_Core.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"FFmpegCore.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;assert.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;jni.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;SLES/OpenSLES.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;SLES/OpenSLES_Android.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="comment">// for native asset manager</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;android/asset_manager.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;android/asset_manager_jni.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"log.h"</span></span></div><div class="line"></div><div class="line"><span class="comment">// engine interfaces</span></div><div class="line"><span class="keyword">static</span> SLObjectItf engineObject = <span class="literal">NULL</span>;</div><div class="line"><span class="keyword">static</span> SLEngineItf engineEngine;</div><div class="line"></div><div class="line"><span class="comment">// output mix interfaces</span></div><div class="line"><span class="keyword">static</span> SLObjectItf outputMixObject = <span class="literal">NULL</span>;</div><div class="line"><span class="keyword">static</span> SLEnvironmentalReverbItf outputMixEnvironmentalReverb = <span class="literal">NULL</span>;</div><div class="line"></div><div class="line"><span class="comment">// buffer queue player interfaces</span></div><div class="line"><span class="keyword">static</span> SLObjectItf bqPlayerObject = <span class="literal">NULL</span>;</div><div class="line"><span class="keyword">static</span> SLPlayItf bqPlayerPlay;</div><div class="line"><span class="keyword">static</span> SLAndroidSimpleBufferQueueItf bqPlayerBufferQueue;</div><div class="line"><span class="keyword">static</span> SLEffectSendItf bqPlayerEffectSend;</div><div class="line"><span class="keyword">static</span> SLMuteSoloItf bqPlayerMuteSolo;</div><div class="line"><span class="keyword">static</span> SLVolumeItf bqPlayerVolume;</div><div class="line"></div><div class="line"><span class="comment">// aux effect on the output mix, used by the buffer queue player</span></div><div class="line"><span class="keyword">static</span> <span class="keyword">const</span> SLEnvironmentalReverbSettings reverbSettings =</div><div class="line">        SL_I3DL2_ENVIRONMENT_PRESET_STONECORRIDOR;</div><div class="line"></div><div class="line"><span class="keyword">static</span> <span class="keyword">void</span> *buffer;</div><div class="line"><span class="keyword">static</span> <span class="keyword">size_t</span> bufferSize;</div><div class="line"></div><div class="line"><span class="comment">// this callback handler is called every time a buffer finishes playing</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">bqPlayerCallback</span><span class="params">(SLAndroidSimpleBufferQueueItf bq, <span class="keyword">void</span> *context)</span></span></div><div class="line">&#123;</div><div class="line">    LOGD(<span class="string">"&gt;&gt; buffere queue callback"</span>);</div><div class="line">    assert(bq == bqPlayerBufferQueue);</div><div class="line">    bufferSize = <span class="number">0</span>;</div><div class="line">    <span class="comment">//assert(NULL == context);</span></div><div class="line">    getPCM(&amp;buffer, &amp;bufferSize);</div><div class="line">    <span class="comment">// for streaming playback, replace this test by logic to find and fill the next buffer</span></div><div class="line">    <span class="keyword">if</span> (<span class="literal">NULL</span> != buffer &amp;&amp; <span class="number">0</span> != bufferSize) &#123;</div><div class="line">        SLresult result;</div><div class="line">        <span class="comment">// enqueue another buffer</span></div><div class="line">        result = (*bqPlayerBufferQueue)-&gt;Enqueue(bqPlayerBufferQueue, buffer,</div><div class="line">                                                 bufferSize);</div><div class="line">        <span class="comment">// the most likely other result is SL_RESULT_BUFFER_INSUFFICIENT,</span></div><div class="line">        <span class="comment">// which for this code example would indicate a programming error</span></div><div class="line">        assert(SL_RESULT_SUCCESS == result);</div><div class="line"></div><div class="line">        (<span class="keyword">void</span>)result;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">initOpenSLES</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    LOGD(<span class="string">"&gt;&gt; initOpenSLES..."</span>);</div><div class="line">    SLresult result;</div><div class="line"></div><div class="line">    <span class="comment">// 1、create engine</span></div><div class="line">    result = slCreateEngine(&amp;engineObject, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</div><div class="line">    LOGD(<span class="string">"&gt;&gt; initOpenSLES... step 1, result = %d"</span>, result);</div><div class="line"></div><div class="line">    <span class="comment">// 2、realize the engine</span></div><div class="line">    result = (*engineObject)-&gt;Realize(engineObject, SL_BOOLEAN_FALSE);</div><div class="line">    LOGD(<span class="string">"&gt;&gt; initOpenSLES...step 2, result = %d"</span>, result);</div><div class="line"></div><div class="line">    <span class="comment">// 3、get the engine interface, which is needed in order to create other objects</span></div><div class="line">    result = (*engineObject)-&gt;GetInterface(engineObject, SL_IID_ENGINE, &amp;engineEngine);</div><div class="line">    LOGD(<span class="string">"&gt;&gt; initOpenSLES...step 3, result = %d"</span>, result);</div><div class="line"></div><div class="line">    <span class="comment">// 4、create output mix, with environmental reverb specified as a non-required interface</span></div><div class="line">    <span class="keyword">const</span> SLInterfaceID ids[<span class="number">1</span>] = &#123;SL_IID_ENVIRONMENTALREVERB&#125;;</div><div class="line">    <span class="keyword">const</span> SLboolean req[<span class="number">1</span>] = &#123;SL_BOOLEAN_FALSE&#125;;</div><div class="line">    result = (*engineEngine)-&gt;CreateOutputMix(engineEngine, &amp;outputMixObject, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">    LOGD(<span class="string">"&gt;&gt; initOpenSLES...step 4, result = %d"</span>, result);</div><div class="line"></div><div class="line">    <span class="comment">// 5、realize the output mix</span></div><div class="line">    result = (*outputMixObject)-&gt;Realize(outputMixObject, SL_BOOLEAN_FALSE);</div><div class="line">    LOGD(<span class="string">"&gt;&gt; initOpenSLES...step 5, result = %d"</span>, result);</div><div class="line"></div><div class="line">    <span class="comment">// 6、get the environmental reverb interface</span></div><div class="line">    <span class="comment">// this could fail if the environmental reverb effect is not available,</span></div><div class="line">    <span class="comment">// either because the feature is not present, excessive CPU load, or</span></div><div class="line">    <span class="comment">// the required MODIFY_AUDIO_SETTINGS permission was not requested and granted</span></div><div class="line">    result = (*outputMixObject)-&gt;GetInterface(outputMixObject, SL_IID_ENVIRONMENTALREVERB,</div><div class="line">                                              &amp;outputMixEnvironmentalReverb);</div><div class="line">    <span class="keyword">if</span> (SL_RESULT_SUCCESS == result) &#123;</div><div class="line">        result = (*outputMixEnvironmentalReverb)-&gt;SetEnvironmentalReverbProperties(</div><div class="line">                outputMixEnvironmentalReverb, &amp;reverbSettings);</div><div class="line">        LOGD(<span class="string">"&gt;&gt; initOpenSLES...step 6, result = %d"</span>, result);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// init buffer queue</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">initBufferQueue</span><span class="params">(<span class="keyword">int</span> rate, <span class="keyword">int</span> channel, <span class="keyword">int</span> bitsPerSample)</span></span></div><div class="line">&#123;</div><div class="line">    LOGD(<span class="string">"&gt;&gt; initBufferQueue"</span>);</div><div class="line">    SLresult result;</div><div class="line"></div><div class="line">    <span class="comment">// configure audio source</span></div><div class="line">    SLDataLocator_AndroidSimpleBufferQueue loc_bufq = &#123;SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE, <span class="number">2</span>&#125;;</div><div class="line">    SLDataFormat_PCM format_pcm;</div><div class="line">    format_pcm.formatType = SL_DATAFORMAT_PCM;</div><div class="line">    format_pcm.numChannels = channel;</div><div class="line">    format_pcm.samplesPerSec = rate * <span class="number">1000</span>;</div><div class="line">    format_pcm.bitsPerSample = bitsPerSample;</div><div class="line">    format_pcm.containerSize = <span class="number">16</span>;</div><div class="line">    <span class="keyword">if</span> (channel == <span class="number">2</span>)</div><div class="line">        format_pcm.channelMask = SL_SPEAKER_FRONT_LEFT | SL_SPEAKER_FRONT_RIGHT;</div><div class="line">    <span class="keyword">else</span></div><div class="line">        format_pcm.channelMask = SL_SPEAKER_FRONT_CENTER;</div><div class="line">    format_pcm.endianness = SL_BYTEORDER_LITTLEENDIAN;</div><div class="line">    SLDataSource audioSrc = &#123;&amp;loc_bufq, &amp;format_pcm&#125;;</div><div class="line"></div><div class="line">    <span class="comment">// configure audio sink</span></div><div class="line">    SLDataLocator_OutputMix loc_outmix = &#123;SL_DATALOCATOR_OUTPUTMIX, outputMixObject&#125;;</div><div class="line">    SLDataSink audioSnk = &#123;&amp;loc_outmix, <span class="literal">NULL</span>&#125;;</div><div class="line"></div><div class="line">    <span class="comment">// create audio player</span></div><div class="line">    <span class="keyword">const</span> SLInterfaceID ids[<span class="number">3</span>] = &#123;SL_IID_BUFFERQUEUE, SL_IID_EFFECTSEND,</div><div class="line">            <span class="comment">/*SL_IID_MUTESOLO,*/</span> SL_IID_VOLUME&#125;;</div><div class="line">    <span class="keyword">const</span> SLboolean req[<span class="number">3</span>] = &#123;SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE,</div><div class="line">            <span class="comment">/*SL_BOOLEAN_TRUE,*/</span> SL_BOOLEAN_TRUE&#125;;</div><div class="line">    result = (*engineEngine)-&gt;CreateAudioPlayer(engineEngine, &amp;bqPlayerObject, &amp;audioSrc, &amp;audioSnk,</div><div class="line">                                                <span class="number">3</span>, ids, req);</div><div class="line">    assert(SL_RESULT_SUCCESS == result);</div><div class="line">    (<span class="keyword">void</span>)result;</div><div class="line"></div><div class="line">    <span class="comment">// realize the player</span></div><div class="line">    result = (*bqPlayerObject)-&gt;Realize(bqPlayerObject, SL_BOOLEAN_FALSE);</div><div class="line">    assert(SL_RESULT_SUCCESS == result);</div><div class="line">    (<span class="keyword">void</span>)result;</div><div class="line"></div><div class="line">    <span class="comment">// get the play interface</span></div><div class="line">    result = (*bqPlayerObject)-&gt;GetInterface(bqPlayerObject, SL_IID_PLAY, &amp;bqPlayerPlay);</div><div class="line">    assert(SL_RESULT_SUCCESS == result);</div><div class="line">    (<span class="keyword">void</span>)result;</div><div class="line"></div><div class="line">    <span class="comment">// get the buffer queue interface</span></div><div class="line">    result = (*bqPlayerObject)-&gt;GetInterface(bqPlayerObject, SL_IID_BUFFERQUEUE,</div><div class="line">                                             &amp;bqPlayerBufferQueue);</div><div class="line">    assert(SL_RESULT_SUCCESS == result);</div><div class="line">    (<span class="keyword">void</span>)result;</div><div class="line"></div><div class="line">    <span class="comment">// register callback on the buffer queue</span></div><div class="line">    result = (*bqPlayerBufferQueue)-&gt;RegisterCallback(bqPlayerBufferQueue, bqPlayerCallback, <span class="literal">NULL</span>);</div><div class="line">    assert(SL_RESULT_SUCCESS == result);</div><div class="line">    (<span class="keyword">void</span>)result;</div><div class="line"></div><div class="line">    <span class="comment">// get the effect send interface</span></div><div class="line">    result = (*bqPlayerObject)-&gt;GetInterface(bqPlayerObject, SL_IID_EFFECTSEND,</div><div class="line">                                             &amp;bqPlayerEffectSend);</div><div class="line">    assert(SL_RESULT_SUCCESS == result);</div><div class="line">    (<span class="keyword">void</span>)result;</div><div class="line"></div><div class="line">    <span class="comment">// get the volume interface</span></div><div class="line">    result = (*bqPlayerObject)-&gt;GetInterface(bqPlayerObject, SL_IID_VOLUME, &amp;bqPlayerVolume);</div><div class="line">    assert(SL_RESULT_SUCCESS == result);</div><div class="line">    (<span class="keyword">void</span>)result;</div><div class="line"></div><div class="line">    <span class="comment">// set the player's state to playing</span></div><div class="line">    result = (*bqPlayerPlay)-&gt;SetPlayState(bqPlayerPlay, SL_PLAYSTATE_PLAYING);</div><div class="line">    assert(SL_RESULT_SUCCESS == result);</div><div class="line">    (<span class="keyword">void</span>)result;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// stop the native audio system</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">// destroy buffer queue audio player object, and invalidate all associated interfaces</span></div><div class="line">    <span class="keyword">if</span> (bqPlayerObject != <span class="literal">NULL</span>) &#123;</div><div class="line">        (*bqPlayerObject)-&gt;Destroy(bqPlayerObject);</div><div class="line">        bqPlayerObject = <span class="literal">NULL</span>;</div><div class="line">        bqPlayerPlay = <span class="literal">NULL</span>;</div><div class="line">        bqPlayerBufferQueue = <span class="literal">NULL</span>;</div><div class="line">        bqPlayerEffectSend = <span class="literal">NULL</span>;</div><div class="line">        bqPlayerMuteSolo = <span class="literal">NULL</span>;</div><div class="line">        bqPlayerVolume = <span class="literal">NULL</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// destroy output mix object, and invalidate all associated interfaces</span></div><div class="line">    <span class="keyword">if</span> (outputMixObject != <span class="literal">NULL</span>) &#123;</div><div class="line">        (*outputMixObject)-&gt;Destroy(outputMixObject);</div><div class="line">        outputMixObject = <span class="literal">NULL</span>;</div><div class="line">        outputMixEnvironmentalReverb = <span class="literal">NULL</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// destroy engine object, and invalidate all associated interfaces</span></div><div class="line">    <span class="keyword">if</span> (engineObject != <span class="literal">NULL</span>) &#123;</div><div class="line">        (*engineObject)-&gt;Destroy(engineObject);</div><div class="line">        engineObject = <span class="literal">NULL</span>;</div><div class="line">        engineEngine = <span class="literal">NULL</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 释放FFmpeg解码器</span></div><div class="line">    releaseFFmpeg();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">play</span><span class="params">(<span class="keyword">char</span> *url)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> rate, channel;</div><div class="line">    LOGD(<span class="string">"...get url=%s"</span>, url);</div><div class="line">    <span class="comment">// 1、初始化FFmpeg解码器</span></div><div class="line">    initFFmpeg(&amp;rate, &amp;channel, url);</div><div class="line"></div><div class="line">    <span class="comment">// 2、初始化OpenSLES</span></div><div class="line">    initOpenSLES();</div><div class="line"></div><div class="line">    <span class="comment">// 3、初始化BufferQueue</span></div><div class="line">    initBufferQueue(rate, channel, SL_PCMSAMPLEFORMAT_FIXED_16);</div><div class="line"></div><div class="line">    <span class="comment">// 4、启动音频播放</span></div><div class="line">    bqPlayerCallback(bqPlayerBufferQueue, <span class="literal">NULL</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>FFmpegCore.c<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"log.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"FFmpegCore.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"libavcodec/avcodec.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"libavformat/avformat.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"libswscale/swscale.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"libswresample/swresample.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"libavutil/samplefmt.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;SLES/OpenSLES.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;SLES/OpenSLES_Android.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">uint8_t</span> *outputBuffer;</div><div class="line"><span class="keyword">size_t</span> outputBufferSize;</div><div class="line"></div><div class="line">AVPacket packet;</div><div class="line"><span class="keyword">int</span> audioStream;</div><div class="line">AVFrame *aFrame;</div><div class="line">SwrContext *swr;</div><div class="line">AVFormatContext *aFormatCtx;</div><div class="line">AVCodecContext *aCodecCtx;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">initFFmpeg</span><span class="params">(<span class="keyword">int</span> *rate, <span class="keyword">int</span> *channel, <span class="keyword">char</span> *url)</span> </span>&#123;</div><div class="line"></div><div class="line">    av_register_all();</div><div class="line">    aFormatCtx = avformat_alloc_context();</div><div class="line">    LOGD(<span class="string">"ffmpeg get url=:%s"</span>, url);</div><div class="line">    <span class="comment">// 网络音频流</span></div><div class="line">    <span class="keyword">char</span> *file_name = url;</div><div class="line"></div><div class="line">    <span class="comment">// Open audio file</span></div><div class="line">    <span class="keyword">if</span> (avformat_open_input(&amp;aFormatCtx, file_name, <span class="literal">NULL</span>, <span class="literal">NULL</span>) != <span class="number">0</span>) &#123;</div><div class="line">        LOGE(<span class="string">"Couldn't open file:%s\n"</span>, file_name);</div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span>; <span class="comment">// Couldn't open file</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// Retrieve stream information</span></div><div class="line">    <span class="keyword">if</span> (avformat_find_stream_info(aFormatCtx, <span class="literal">NULL</span>) &lt; <span class="number">0</span>) &#123;</div><div class="line">        LOGE(<span class="string">"Couldn't find stream information."</span>);</div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// Find the first audio stream</span></div><div class="line">    <span class="keyword">int</span> i;</div><div class="line">    audioStream = <span class="number">-1</span>;</div><div class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; aFormatCtx-&gt;nb_streams; i++) &#123;</div><div class="line">        <span class="keyword">if</span> (aFormatCtx-&gt;streams[i]-&gt;codec-&gt;codec_type == AVMEDIA_TYPE_AUDIO &amp;&amp;</div><div class="line">            audioStream &lt; <span class="number">0</span>) &#123;</div><div class="line">            audioStream = i;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (audioStream == <span class="number">-1</span>) &#123;</div><div class="line">        LOGE(<span class="string">"Couldn't find audio stream!"</span>);</div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// Get a pointer to the codec context for the video stream</span></div><div class="line">    aCodecCtx = aFormatCtx-&gt;streams[audioStream]-&gt;codec;</div><div class="line"></div><div class="line">    <span class="comment">// Find the decoder for the audio stream</span></div><div class="line">    AVCodec *aCodec = avcodec_find_decoder(aCodecCtx-&gt;codec_id);</div><div class="line">    <span class="keyword">if</span> (!aCodec) &#123;</div><div class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Unsupported codec!\n"</span>);</div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (avcodec_open2(aCodecCtx, aCodec, <span class="literal">NULL</span>) &lt; <span class="number">0</span>) &#123;</div><div class="line">        LOGE(<span class="string">"Could not open codec."</span>);</div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span>; <span class="comment">// Could not open codec</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    aFrame = av_frame_alloc();</div><div class="line"></div><div class="line">    <span class="comment">// 设置格式转换</span></div><div class="line">    swr = swr_alloc();</div><div class="line">    av_opt_set_int(swr, <span class="string">"in_channel_layout"</span>,  aCodecCtx-&gt;channel_layout, <span class="number">0</span>);</div><div class="line">    av_opt_set_int(swr, <span class="string">"out_channel_layout"</span>, aCodecCtx-&gt;channel_layout,  <span class="number">0</span>);</div><div class="line">    av_opt_set_int(swr, <span class="string">"in_sample_rate"</span>,     aCodecCtx-&gt;sample_rate, <span class="number">0</span>);</div><div class="line">    av_opt_set_int(swr, <span class="string">"out_sample_rate"</span>,    aCodecCtx-&gt;sample_rate, <span class="number">0</span>);</div><div class="line">    av_opt_set_sample_fmt(swr, <span class="string">"in_sample_fmt"</span>,  aCodecCtx-&gt;sample_fmt, <span class="number">0</span>);</div><div class="line">    av_opt_set_sample_fmt(swr, <span class="string">"out_sample_fmt"</span>, AV_SAMPLE_FMT_S16,  <span class="number">0</span>);</div><div class="line">    swr_init(swr);</div><div class="line"></div><div class="line">    <span class="comment">// 分配PCM数据缓存</span></div><div class="line">    outputBufferSize = <span class="number">8196</span>;</div><div class="line">    outputBuffer = (<span class="keyword">uint8_t</span> *) <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">uint8_t</span>) * outputBufferSize);</div><div class="line"></div><div class="line">    <span class="comment">// 返回sample rate和channels</span></div><div class="line">    *rate = aCodecCtx-&gt;sample_rate;</div><div class="line">    *channel = aCodecCtx-&gt;channels;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 获取PCM数据, 自动回调获取</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">getPCM</span><span class="params">(<span class="keyword">void</span> **pcm, <span class="keyword">size_t</span> *pcmSize)</span> </span>&#123;</div><div class="line">    LOGD(<span class="string">"&gt;&gt; getPcm"</span>);</div><div class="line">    <span class="keyword">while</span> (av_read_frame(aFormatCtx, &amp;packet) &gt;= <span class="number">0</span>) &#123;</div><div class="line"></div><div class="line">        <span class="keyword">int</span> frameFinished = <span class="number">0</span>;</div><div class="line">        <span class="comment">// Is this a packet from the audio stream?</span></div><div class="line">        <span class="keyword">if</span> (packet.stream_index == audioStream) &#123;</div><div class="line">            avcodec_decode_audio4(aCodecCtx, aFrame, &amp;frameFinished, &amp;packet);</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (frameFinished) &#123;</div><div class="line">                <span class="comment">// data_size为音频数据所占的字节数</span></div><div class="line">                <span class="keyword">int</span> data_size = av_samples_get_buffer_size(</div><div class="line">                        aFrame-&gt;linesize, aCodecCtx-&gt;channels,</div><div class="line">                        aFrame-&gt;nb_samples, aCodecCtx-&gt;sample_fmt, <span class="number">1</span>);</div><div class="line">                LOGD(<span class="string">"&gt;&gt; getPcm data_size=%d"</span>, data_size);</div><div class="line">                <span class="comment">// 这里内存再分配可能存在问题</span></div><div class="line">                <span class="keyword">if</span> (data_size &gt; outputBufferSize) &#123;</div><div class="line">                    outputBufferSize = data_size;</div><div class="line">                    outputBuffer = (<span class="keyword">uint8_t</span> *) <span class="built_in">realloc</span>(outputBuffer,</div><div class="line">                                                       <span class="keyword">sizeof</span>(<span class="keyword">uint8_t</span>) * outputBufferSize);</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                <span class="comment">// 音频格式转换</span></div><div class="line">                swr_convert(swr, &amp;outputBuffer, aFrame-&gt;nb_samples,</div><div class="line">                            (<span class="keyword">uint8_t</span> <span class="keyword">const</span> **) (aFrame-&gt;extended_data),</div><div class="line">                        aFrame-&gt;nb_samples);</div><div class="line"></div><div class="line">                <span class="comment">// 返回pcm数据</span></div><div class="line">                *pcm = outputBuffer;</div><div class="line">                *pcmSize = data_size;</div><div class="line">                <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 释放相关资源</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">releaseFFmpeg</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    av_packet_unref(&amp;packet);</div><div class="line">    av_free(outputBuffer);</div><div class="line">    av_free(aFrame);</div><div class="line">    avcodec_close(aCodecCtx);</div><div class="line">    avformat_close_input(&amp;aFormatCtx);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div></pre></td></tr></table></figure></p>
+<p>NativePlayer.c<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">// Created by hejunlin on 17/5/6.</span></div><div class="line"><span class="comment">//</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"log.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"com_hejunlin_ffmpegaudio_NativePlayer.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"OpenSL_ES_Core.h"</span></span></div><div class="line"></div><div class="line"><span class="function">JNIEXPORT <span class="keyword">void</span> JNICALL</span></div><div class="line"><span class="title">Java_com_hejunlin_ffmpegaudio_NativePlayer_play</span><span class="params">(JNIEnv *env, jclass type, jstring url_)</span> &#123;</div><div class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *url = (*env)-&gt;GetStringUTFChars(env, url_, <span class="number">0</span>);</div><div class="line">    LOGD(<span class="string">"start playaudio... url=%s"</span>, url);</div><div class="line"></div><div class="line">    play(url);</div><div class="line">    (*env)-&gt;ReleaseStringUTFChars(env, url_, url);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function">JNIEXPORT <span class="keyword">void</span> JNICALL</span></div><div class="line"><span class="title">Java_com_hejunlin_ffmpegaudio_NativePlayer_stop</span><span class="params">(JNIEnv *env, jclass type)</span> &#123;</div><div class="line"></div><div class="line">    LOGD(<span class="string">"stop"</span>);</div><div class="line">    stop();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>通过cmake，或ndk-build都可以编译，会生成一个NativePlayer.so</p>
+<p><img src="http://img.blog.csdn.net/20170507110500148?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>效果图：</p>
+<p><img src="http://img.blog.csdn.net/20170507103743452?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>log输出如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div></pre></td><td class="code"><pre><div class="line">05-07 10:14:04.476 6001-6097/com.hejunlin.ffmpegaudio D/Surface: Surface::setBuffersDimensions(this=0xf45b6300,w=1080,h=1920)</div><div class="line">05-07 10:14:04.491 6001-6097/com.hejunlin.ffmpegaudio D/Surface: Surface::setBuffersDimensions(this=0xf45b6300,w=1080,h=1920)</div><div class="line">05-07 10:14:04.516 6001-6097/com.hejunlin.ffmpegaudio D/Surface: Surface::setBuffersDimensions(this=0xf45b6300,w=1080,h=1920)</div><div class="line">05-07 10:14:04.525 6001-6097/com.hejunlin.ffmpegaudio D/Surface: Surface::setBuffersDimensions(this=0xf45b6300,w=1080,h=1920)</div><div class="line">05-07 10:14:04.542 6001-6097/com.hejunlin.ffmpegaudio D/Surface: Surface::setBuffersDimensions(this=0xf45b6300,w=1080,h=1920)</div><div class="line">05-07 10:14:04.556 6001-6097/com.hejunlin.ffmpegaudio D/Surface: Surface::setBuffersDimensions(this=0xf45b6300,w=1080,h=1920)</div><div class="line">05-07 10:14:04.573 6001-6097/com.hejunlin.ffmpegaudio D/Surface: Surface::setBuffersDimensions(this=0xf45b6300,w=1080,h=1920)</div><div class="line">05-07 10:14:04.577 6001-6001/com.hejunlin.ffmpegaudio W/linker: libNativePlayer.so: unused DT entry: type 0x6ffffffe arg 0x1414</div><div class="line">05-07 10:14:04.577 6001-6001/com.hejunlin.ffmpegaudio W/linker: libNativePlayer.so: unused DT entry: type 0x6fffffff arg 0x4</div><div class="line">05-07 10:14:04.578 6001-6001/com.hejunlin.ffmpegaudio W/linker: libavcodec-57.so: unused DT entry: type 0x6ffffffe arg 0x5da4</div><div class="line">05-07 10:14:04.578 6001-6001/com.hejunlin.ffmpegaudio W/linker: libavcodec-57.so: unused DT entry: type 0x6fffffff arg 0x2</div><div class="line">05-07 10:14:04.578 6001-6001/com.hejunlin.ffmpegaudio W/linker: libavformat-57.so: unused DT entry: type 0x6ffffffe arg 0x6408</div><div class="line">05-07 10:14:04.578 6001-6001/com.hejunlin.ffmpegaudio W/linker: libavformat-57.so: unused DT entry: type 0x6fffffff arg 0x2</div><div class="line">05-07 10:14:04.578 6001-6001/com.hejunlin.ffmpegaudio W/linker: libswresample-2.so: unused DT entry: type 0x6ffffffe arg 0xcd4</div><div class="line">05-07 10:14:04.578 6001-6001/com.hejunlin.ffmpegaudio W/linker: libswresample-2.so: unused DT entry: type 0x6fffffff arg 0x1</div><div class="line">05-07 10:14:04.578 6001-6001/com.hejunlin.ffmpegaudio W/linker: libswscale-4.so: unused DT entry: type 0x6ffffffe arg 0xd70</div><div class="line">05-07 10:14:04.578 6001-6001/com.hejunlin.ffmpegaudio W/linker: libswscale-4.so: unused DT entry: type 0x6fffffff arg 0x1</div><div class="line">05-07 10:14:04.589 6001-6001/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/NativePlayer.c: Java_com_hejunlin_ffmpegaudio_NativePlayer_play:start playaudio... url=http://qzone.60dj.com/huiyuan/201704/19/201704190533197825_35285.mp3</div><div class="line">05-07 10:14:04.589 6001-6001/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/OpenSL_ES_Core.c: play:...get url=http://qzone.60dj.com/huiyuan/201704/19/201704190533197825_35285.mp3</div><div class="line">05-07 10:14:04.590 6001-6001/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/FFmpegCore.c: initFFmpeg:ffmpeg get url=:http://qzone.60dj.com/huiyuan/201704/19/201704190533197825_35285.mp3</div><div class="line">05-07 10:14:04.696 6001-6001/com.hejunlin.ffmpegaudio D/libc-netbsd: getaddrinfo: qzone.60dj.com get result from proxy &gt;&gt;</div><div class="line">05-07 10:14:04.949 6001-6001/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/OpenSL_ES_Core.c: initOpenSLES:&gt;&gt; initOpenSLES...</div><div class="line">05-07 10:14:04.950 6001-6001/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/OpenSL_ES_Core.c: initOpenSLES:&gt;&gt; initOpenSLES... step 1, result = 0</div><div class="line">05-07 10:14:04.950 6001-6001/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/OpenSL_ES_Core.c: initOpenSLES:&gt;&gt; initOpenSLES...step 2, result = 0</div><div class="line">05-07 10:14:04.950 6001-6001/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/OpenSL_ES_Core.c: initOpenSLES:&gt;&gt; initOpenSLES...step 3, result = 0</div><div class="line">05-07 10:14:04.950 6001-6001/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/OpenSL_ES_Core.c: initOpenSLES:&gt;&gt; initOpenSLES...step 4, result = 0</div><div class="line">05-07 10:14:04.950 6001-6001/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/OpenSL_ES_Core.c: initOpenSLES:&gt;&gt; initOpenSLES...step 5, result = 0</div><div class="line">05-07 10:14:04.950 6001-6001/com.hejunlin.ffmpegaudio W/libOpenSLES: Leaving Object::GetInterface (SL_RESULT_FEATURE_UNSUPPORTED)</div><div class="line">05-07 10:14:04.950 6001-6001/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/OpenSL_ES_Core.c: initBufferQueue:&gt;&gt; initBufferQueue</div><div class="line">05-07 10:14:04.951 6001-6001/com.hejunlin.ffmpegaudio V/AudioTrack: set(): streamType 3, sampleRate 44100, format 0x1, channelMask 0x3, frameCount 0, flags #0, notificationFrames 0, sessionId 774, transferType 0</div><div class="line">05-07 10:14:04.951 6001-6001/com.hejunlin.ffmpegaudio V/AudioTrack: set() streamType 3 frameCount 0 flags 0000</div><div class="line">05-07 10:14:04.951 6001-6001/com.hejunlin.ffmpegaudio D/AudioTrack: audiotrack 0xf459cd80 set Type 3, rate 44100, fmt 1, chn 3, fcnt 0, flags 0000</div><div class="line">05-07 10:14:04.951 6001-6001/com.hejunlin.ffmpegaudio D/AudioTrack: mChannelMask 0x3</div><div class="line">05-07 10:14:04.953 6001-6001/com.hejunlin.ffmpegaudio V/AudioTrack: createTrack_l() output 2 afLatency 21</div><div class="line">05-07 10:14:04.953 6001-6001/com.hejunlin.ffmpegaudio V/AudioTrack: afFrameCount=1024, minBufCount=1, afSampleRate=48000, afLatency=21</div><div class="line">05-07 10:14:04.953 6001-6001/com.hejunlin.ffmpegaudio V/AudioTrack: minFrameCount: 2822, afFrameCount=1024, minBufCount=3, sampleRate=44100, afSampleRate=48000, afLatency=21</div><div class="line">05-07 10:14:04.954 6001-6001/com.hejunlin.ffmpegaudio D/AudioTrackCenter: addTrack, trackId:0xdaf0c000, frameCount:2822, sampleRate:44100, trackPtr:0xf459cd80</div><div class="line">05-07 10:14:04.954 6001-6001/com.hejunlin.ffmpegaudio D/AudioTrackCenter: mAfSampleRate 48000, sampleRate 44100, AfFrameCount 1024 , mAfSampleRate 48000, frameCount 2822</div><div class="line">05-07 10:14:04.979 6001-6001/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/OpenSL_ES_Core.c: bqPlayerCallback:&gt;&gt; buffere queue callback</div><div class="line">05-07 10:14:04.979 6001-6001/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/FFmpegCore.c: getPCM:&gt;&gt; getPcm</div><div class="line">05-07 10:14:04.979 6001-6681/com.hejunlin.ffmpegaudio D/AudioTrackShared: front(0x0), mIsOut 1, avail 2822, mFrameCount 2822, filled 0</div><div class="line">05-07 10:14:04.979 6001-6681/com.hejunlin.ffmpegaudio V/AudioTrack: obtainBuffer(940) returned 2822 = 940 + 1882 err 0</div><div class="line">05-07 10:14:04.979 6001-6681/com.hejunlin.ffmpegaudio D/AudioTrackShared: front(0x0), mIsOut 1, interrupt() FUTEX_WAKE</div><div class="line">05-07 10:14:04.979 6001-6681/com.hejunlin.ffmpegaudio D/AudioTrack: audiotrack 0xf459cd80 stop done</div><div class="line">05-07 10:14:04.980 6001-6001/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/FFmpegCore.c: getPCM:&gt;&gt; getPcm data_size=188</div><div class="line">05-07 10:14:04.980 6001-6681/com.hejunlin.ffmpegaudio D/AudioTrackShared: front(0x0), mIsOut 1, avail 2822, mFrameCount 2822, filled 0</div><div class="line">05-07 10:14:04.980 6001-6681/com.hejunlin.ffmpegaudio V/AudioTrack: obtainBuffer(940) returned 2822 = 940 + 1882 err 0</div><div class="line">05-07 10:14:04.980 6001-6681/com.hejunlin.ffmpegaudio D/AudioTrackShared: front(0x0), mIsOut 1, avail 2775, mFrameCount 2822, filled 47</div><div class="line">05-07 10:14:04.980 6001-6681/com.hejunlin.ffmpegaudio V/AudioTrack: obtainBuffer(893) returned 2775 = 893 + 1882 err 0</div><div class="line">05-07 10:14:04.980 6001-6681/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/OpenSL_ES_Core.c: bqPlayerCallback:&gt;&gt; buffere queue callback</div><div class="line">05-07 10:14:04.980 6001-6681/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/FFmpegCore.c: getPCM:&gt;&gt; getPcm</div><div class="line">05-07 10:14:04.980 6001-6681/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/FFmpegCore.c: getPCM:&gt;&gt; getPcm data_size=4608</div><div class="line">05-07 10:14:04.980 6001-6681/com.hejunlin.ffmpegaudio D/AudioTrackShared: front(0x0), mIsOut 1, avail 1882, mFrameCount 2822, filled 940</div><div class="line">05-07 10:14:04.980 6001-6681/com.hejunlin.ffmpegaudio V/AudioTrack: obtainBuffer(940) returned 1882 = 940 + 942 err 0</div><div class="line">05-07 10:14:04.980 6001-6681/com.hejunlin.ffmpegaudio D/AudioTrackShared: front(0x0), mIsOut 1, avail 1623, mFrameCount 2822, filled 1199</div><div class="line">05-07 10:14:04.980 6001-6681/com.hejunlin.ffmpegaudio V/AudioTrack: obtainBuffer(681) returned 1623 = 681 + 942 err 0</div><div class="line">05-07 10:14:04.980 6001-6681/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/OpenSL_ES_Core.c: bqPlayerCallback:&gt;&gt; buffere queue callback</div><div class="line">05-07 10:14:04.980 6001-6681/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/FFmpegCore.c: getPCM:&gt;&gt; getPcm</div><div class="line">05-07 10:14:04.981 6001-6681/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/FFmpegCore.c: getPCM:&gt;&gt; getPcm data_size=4608</div><div class="line">05-07 10:14:04.981 6001-6681/com.hejunlin.ffmpegaudio D/AudioTrackShared: front(0x0), mIsOut 1, avail 942, mFrameCount 2822, filled 1880</div><div class="line">05-07 10:14:04.981 6001-6681/com.hejunlin.ffmpegaudio V/AudioTrack: obtainBuffer(940) returned 942 = 940 + 2 err 0</div><div class="line">05-07 10:14:04.981 6001-6681/com.hejunlin.ffmpegaudio D/AudioTrackShared: front(0x0), mIsOut 1, avail 471, mFrameCount 2822, filled 2351</div><div class="line">05-07 10:14:04.981 6001-6681/com.hejunlin.ffmpegaudio V/AudioTrack: obtainBuffer(469) returned 471 = 469 + 2 err 0</div><div class="line">05-07 10:14:04.981 6001-6681/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/OpenSL_ES_Core.c: bqPlayerCallback:&gt;&gt; buffere queue callback</div><div class="line">05-07 10:14:04.981 6001-6681/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/FFmpegCore.c: getPCM:&gt;&gt; getPcm</div><div class="line">05-07 10:14:04.981 6001-6681/com.hejunlin.ffmpegaudio D//Users/hejunlin/AndroidStudioProjects/FFmpegAudio/app/src/main/jni/FFmpegCore.c: getPCM:&gt;&gt; getPcm data_size=4608</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/upload/wechat-qcode.jpg" alt="逆流的鱼yuiop wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，第一时间关注我的博客！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/upload/wechat-reward-image.png" alt="逆流的鱼yuiop WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/upload/alipay-reward-image.jpg" alt="逆流的鱼yuiop Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ffmpeg/" rel="tag"># ffmpeg</a>
+          
+            <a href="/tags/OpenSL-ES/" rel="tag"># OpenSL ES</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/24/FFmpeg总结（十二）用ffmpeg与nginx实现直播多路流并发播放/" rel="next" title="FFmpeg总结（十二）用ffmpeg与nginx实现直播多路流并发播放">
+                <i class="fa fa-chevron-left"></i> FFmpeg总结（十二）用ffmpeg与nginx实现直播多路流并发播放
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTIwNC81Nzcx"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://avatar.csdn.net/9/5/0/1_hejjunlin.jpg"
+               alt="逆流的鱼yuiop" />
+          <p class="site-author-name" itemprop="name">逆流的鱼yuiop</p>
+           
+              <p class="site-description motion-element" itemprop="description">未来的时代，不是知识上的差距，而绝对是思维的差距！</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/hejunlin2013" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005052651342941" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/hejjunlin" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-csdn"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/he-jun-lin-49" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-zhihu"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">逆流的鱼yuiop</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      本站访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人次
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("4rS8uuS3ii4Sl8x7GEa17Du9-gzGzoHsz", "QejwyIQHvplMq5bFgsq8TQvv");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
