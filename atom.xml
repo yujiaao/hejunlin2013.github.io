@@ -61,9 +61,9 @@
       <category term="ffmpeg" scheme="http://yoursite.com/categories/ffmpeg/"/>
     
     
-      <category term="ffmpeg" scheme="http://yoursite.com/tags/ffmpeg/"/>
-    
       <category term="OpenSL ES" scheme="http://yoursite.com/tags/OpenSL-ES/"/>
+    
+      <category term="ffmpeg" scheme="http://yoursite.com/tags/ffmpeg/"/>
     
   </entry>
   
@@ -95,9 +95,9 @@
       <category term="ffmpeg" scheme="http://yoursite.com/categories/ffmpeg/"/>
     
     
-      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
-    
       <category term="ffmpeg" scheme="http://yoursite.com/tags/ffmpeg/"/>
+    
+      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
     
   </entry>
   
