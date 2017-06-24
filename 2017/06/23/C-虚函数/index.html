@@ -95,17 +95,19 @@
 
 
 
-<meta name="description" content="![此处输入图片的描述][1] 为什么使用虚函数？什么是虚函数？虚函数是为了解决什么问题？ 面向对象的三大特征：  封装 多态 继承 普通虚函数 虚析构函数 纯虚函数 抽象类 接口类 隐藏 vs 覆盖 隐藏与覆盖之间的关系 早绑定和晚绑定 虚函数表 什么是多态?    相同对象收到不同消息或不同对象收到相同消息时产生的不同的动作。">
+<meta name="description" content="为什么使用虚函数？什么是虚函数？虚函数是为了解决什么问题？ 面向对象的三大特征：  封装 多态 继承">
 <meta name="keywords" content="虚函数">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++虚函数">
 <meta property="og:url" content="http://yoursite.com/2017/06/23/C-虚函数/index.html">
 <meta property="og:site_name" content="逆流的鱼yuiop">
-<meta property="og:description" content="![此处输入图片的描述][1] 为什么使用虚函数？什么是虚函数？虚函数是为了解决什么问题？ 面向对象的三大特征：  封装 多态 继承 普通虚函数 虚析构函数 纯虚函数 抽象类 接口类 隐藏 vs 覆盖 隐藏与覆盖之间的关系 早绑定和晚绑定 虚函数表 什么是多态?    相同对象收到不同消息或不同对象收到相同消息时产生的不同的动作。">
-<meta property="og:updated_time" content="2017-06-24T09:14:24.654Z">
+<meta property="og:description" content="为什么使用虚函数？什么是虚函数？虚函数是为了解决什么问题？ 面向对象的三大特征：  封装 多态 继承">
+<meta property="og:image" content="http://yoursite.com/upload/game.jpg">
+<meta property="og:updated_time" content="2017-06-24T11:19:19.748Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++虚函数">
-<meta name="twitter:description" content="![此处输入图片的描述][1] 为什么使用虚函数？什么是虚函数？虚函数是为了解决什么问题？ 面向对象的三大特征：  封装 多态 继承 普通虚函数 虚析构函数 纯虚函数 抽象类 接口类 隐藏 vs 覆盖 隐藏与覆盖之间的关系 早绑定和晚绑定 虚函数表 什么是多态?    相同对象收到不同消息或不同对象收到相同消息时产生的不同的动作。">
+<meta name="twitter:description" content="为什么使用虚函数？什么是虚函数？虚函数是为了解决什么问题？ 面向对象的三大特征：  封装 多态 继承">
+<meta name="twitter:image" content="http://yoursite.com/upload/game.jpg">
 
 
 
@@ -308,6 +310,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -346,7 +370,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  3,194
+                  3,184
                 </span>
               
 
@@ -362,7 +386,7 @@
                   <span class="post-meta-item-text">阅读时长</span>
                 
                 <span title="阅读时长">
-                  12
+                  11
                 </span>
               
             </div>
@@ -380,13 +404,15 @@
       
 
       
-        <p>![此处输入图片的描述][1]</p>
+        <center><br><img src="/upload/game.jpg" alt="这里写图片描述"><br></center>
+
 <p>为什么使用虚函数？什么是虚函数？虚函数是为了解决什么问题？</p>
 <p>面向对象的三大特征：</p>
 <ul>
 <li>封装</li>
 <li>多态</li>
-<li>继承<ul>
+<li>继承<a id="more"></a> 
+<ul>
 <li>普通虚函数</li>
 <li>虚析构函数</li>
 <li>纯虚函数</li>
@@ -400,7 +426,8 @@
 </ul>
 </li>
 </ul>
-<p>相同对象收到不同消息或不同对象收到相同消息时产生的不同的动作。<br><a id="more"></a><br>静态多态 vs 动态多态</p>
+<p>相同对象收到不同消息或不同对象收到相同消息时产生的不同的动作。</p>
+<p>静态多态 vs 动态多态</p>
 <p>[-:&gt;静态多态也叫做早绑定<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Rect</span>       //矩形类</span></div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">calcArea</span><span class="params">(<span class="keyword">int</span> width)</span></span>;</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">calcArea</span><span class="params">(<span class="keyword">int</span> width,<span class="keyword">int</span> height)</span></span>;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
 <p>如上面的代码，他们函数名相同，参数个数不同，一看就是互为重载的两个函数<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    Rect.rect;</div><div class="line">    rect.calcArea(<span class="number">10</span>);</div><div class="line">    rect.calcArea(<span class="number">10</span>,<span class="number">20</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>程序在编译阶段根据参数个数确定调用哪个函数。这种情况叫做静态多态（早绑定）</p>
@@ -634,7 +661,7 @@
             
             <div class="site-state-item site-state-categories">
               
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               
             </div>
@@ -645,7 +672,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>

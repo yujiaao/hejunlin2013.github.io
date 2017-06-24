@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="NuPlayer," />
 
 
 
@@ -96,15 +96,18 @@
 
 
 <meta name="description" content="NuPlayer是谷歌新研发的。AwesomePlayer存在BUG，谷歌早已在android M版本中弃用。">
+<meta name="keywords" content="NuPlayer">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android Multimedia框架总结（二十八）NuPlayer到OMX过程">
 <meta property="og:url" content="http://yoursite.com/2017/06/23/Android-Multimedia框架总结（二十八）NuPlayer到OMX过程/index.html">
 <meta property="og:site_name" content="逆流的鱼yuiop">
 <meta property="og:description" content="NuPlayer是谷歌新研发的。AwesomePlayer存在BUG，谷歌早已在android M版本中弃用。">
-<meta property="og:updated_time" content="2017-06-23T10:15:44.767Z">
+<meta property="og:image" content="http://yoursite.com/upload/Knight.jpg">
+<meta property="og:updated_time" content="2017-06-24T11:19:46.802Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Multimedia框架总结（二十八）NuPlayer到OMX过程">
 <meta name="twitter:description" content="NuPlayer是谷歌新研发的。AwesomePlayer存在BUG，谷歌早已在android M版本中弃用。">
+<meta name="twitter:image" content="http://yoursite.com/upload/Knight.jpg">
 
 
 
@@ -307,6 +310,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android-Multimedia/" itemprop="url" rel="index">
+                    <span itemprop="name">Android Multimedia</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -379,7 +404,9 @@
       
 
       
-        <p>NuPlayer是谷歌新研发的。<br>AwesomePlayer存在BUG，谷歌早已在android M版本中弃用。<br><a id="more"></a><br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">sp&lt;MediaPlayerBase&gt; MediaPlayerService::Client::createPlayer(player_type playerType)</div><div class="line">&#123;</div><div class="line">    <span class="comment">// determine if we have the right player type</span></div><div class="line">    sp&lt;MediaPlayerBase&gt; p = mPlayer;</div><div class="line">    <span class="keyword">if</span> ((p != <span class="literal">NULL</span>) &amp;&amp; (p-&gt;playerType() != playerType)) &#123;</div><div class="line">        ALOGV(<span class="string">"delete player"</span>);</div><div class="line">        p.clear();</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (p == <span class="literal">NULL</span>) &#123;</div><div class="line">        p = MediaPlayerFactory::createPlayer(playerType, <span class="keyword">this</span>, notify, mPid);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (p != <span class="literal">NULL</span>) &#123;</div><div class="line">        p-&gt;setUID(mUID);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> p;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+        <center><br><img src="/upload/Knight.jpg" alt="这里写图片描述"><br></center>
+
+<p>NuPlayer是谷歌新研发的。<br>AwesomePlayer存在BUG，谷歌早已在android M版本中弃用。<br><a id="more"></a><br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">sp&lt;MediaPlayerBase&gt; MediaPlayerService::Client::createPlayer(player_type playerType)</div><div class="line">&#123;</div><div class="line">    <span class="comment">// determine if we have the right player type</span></div><div class="line">    sp&lt;MediaPlayerBase&gt; p = mPlayer;</div><div class="line">    <span class="keyword">if</span> ((p != <span class="literal">NULL</span>) &amp;&amp; (p-&gt;playerType() != playerType)) &#123;</div><div class="line">        ALOGV(<span class="string">"delete player"</span>);</div><div class="line">        p.clear();</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (p == <span class="literal">NULL</span>) &#123;</div><div class="line">        p = MediaPlayerFactory::createPlayer(playerType, <span class="keyword">this</span>, notify, mPid);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (p != <span class="literal">NULL</span>) &#123;</div><div class="line">        p-&gt;setUID(mUID);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> p;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>NuPlayerDriver构造时，new NuPlayer<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">NuPlayerDriver::NuPlayerDriver()</div><div class="line">    : mState(STATE_IDLE),</div><div class="line">      mIsAsyncPrepare(<span class="literal">false</span>),</div><div class="line">      mAsyncResult(UNKNOWN_ERROR),</div><div class="line">      mSetSurfaceInProgress(<span class="literal">false</span>),</div><div class="line">      mDurationUs(<span class="number">-1</span>),</div><div class="line">      mPositionUs(<span class="number">-1</span>),</div><div class="line">      mNumFramesTotal(<span class="number">0</span>),</div><div class="line">      mNumFramesDropped(<span class="number">0</span>),</div><div class="line">      mLooper(<span class="keyword">new</span> ALooper),</div><div class="line">      mPlayerFlags(<span class="number">0</span>),</div><div class="line">      mAtEOS(<span class="literal">false</span>),</div><div class="line">      mStartupSeekTimeUs(<span class="number">-1</span>) &#123;</div><div class="line">    mLooper-&gt;setName(<span class="string">"NuPlayerDriver Looper"</span>);</div><div class="line"></div><div class="line">    mLooper-&gt;start(</div><div class="line">            <span class="literal">false</span>, <span class="comment">/* runOnCallingThread */</span></div><div class="line">            <span class="literal">true</span>,  <span class="comment">/* canCallJava */</span></div><div class="line">            PRIORITY_AUDIO);</div><div class="line"></div><div class="line">    mPlayer = <span class="keyword">new</span> NuPlayer;</div><div class="line">    mLooper-&gt;registerHandler(mPlayer);</div><div class="line"></div><div class="line">    mPlayer-&gt;setDriver(<span class="keyword">this</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>NuPlayer.h<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">NuPlayer</span> :</span> <span class="keyword">public</span> AHandler &#123;</div><div class="line">    NuPlayer(<span class="keyword">pid_t</span> pid);</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setUID</span><span class="params">(<span class="keyword">uid_t</span> uid)</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setDriver</span><span class="params">(<span class="keyword">const</span> wp&lt;NuPlayerDriver&gt; &amp;driver)</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setDataSourceAsync</span><span class="params">(<span class="keyword">const</span> sp&lt;IStreamSource&gt; &amp;source)</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setDataSourceAsync</span><span class="params">(</span></span></div><div class="line">            <span class="keyword">const</span> sp&lt;IMediaHTTPService&gt; &amp;httpService,</div><div class="line">            <span class="keyword">const</span> <span class="keyword">char</span> *url,</div><div class="line">            <span class="keyword">const</span> KeyedVector&lt;String8, String8&gt; *headers);</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setDataSourceAsync</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int64_t</span> offset, <span class="keyword">int64_t</span> length)</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setDataSourceAsync</span><span class="params">(<span class="keyword">const</span> sp&lt;DataSource&gt; &amp;source)</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">prepareAsync</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setVideoSurfaceTextureAsync</span><span class="params">(</span></span></div><div class="line">            <span class="keyword">const</span> sp&lt;IGraphicBufferProducer&gt; &amp;bufferProducer);</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setAudioSink</span><span class="params">(<span class="keyword">const</span> sp&lt;MediaPlayerBase::AudioSink&gt; &amp;sink)</span></span>;</div><div class="line">    <span class="keyword">status_t</span> setPlaybackSettings(<span class="keyword">const</span> AudioPlaybackRate &amp;rate);</div><div class="line">    <span class="keyword">status_t</span> getPlaybackSettings(AudioPlaybackRate *rate <span class="comment">/* nonnull */</span>);</div><div class="line">    <span class="keyword">status_t</span> setSyncSettings(<span class="keyword">const</span> AVSyncSettings &amp;sync, <span class="keyword">float</span> videoFpsHint);</div><div class="line">    <span class="keyword">status_t</span> getSyncSettings(AVSyncSettings *sync <span class="comment">/* nonnull */</span>, <span class="keyword">float</span> *videoFps <span class="comment">/* nonnull */</span>);</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">start</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pause</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="comment">// Will notify the driver through "notifyResetComplete" once finished.</span></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">resetAsync</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="comment">// Will notify the driver through "notifySeekComplete" once finished</span></div><div class="line">    <span class="comment">// and needNotify is true.</span></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">seekToAsync</span><span class="params">(<span class="keyword">int64_t</span> seekTimeUs, <span class="keyword">bool</span> needNotify = <span class="literal">false</span>)</span></span>;</div><div class="line"></div><div class="line">    <span class="keyword">status_t</span> setVideoScalingMode(<span class="keyword">int32_t</span> mode);</div><div class="line">    <span class="keyword">status_t</span> getTrackInfo(Parcel* reply) <span class="keyword">const</span>;</div><div class="line">    <span class="keyword">status_t</span> getSelectedTrack(<span class="keyword">int32_t</span> type, Parcel* reply) <span class="keyword">const</span>;</div><div class="line">    <span class="keyword">status_t</span> selectTrack(<span class="keyword">size_t</span> trackIndex, <span class="keyword">bool</span> select, <span class="keyword">int64_t</span> timeUs);</div><div class="line">    <span class="keyword">status_t</span> getCurrentPosition(<span class="keyword">int64_t</span> *mediaUs);</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">getStats</span><span class="params">(Vector&lt;sp&lt;AMessage&gt; &gt; *mTrackStats)</span></span>;</div><div class="line"></div><div class="line">    sp&lt;MetaData&gt; getFileMeta();</div><div class="line">    <span class="function"><span class="keyword">float</span> <span class="title">getFrameRate</span><span class="params">()</span></span>;</div></pre></td></tr></table></figure></p>
 <p>当调用setDataSource时，<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> NuPlayer::setDataSourceAsync(<span class="keyword">const</span> sp&lt;IStreamSource&gt; &amp;source) &#123;</div><div class="line">    sp&lt;AMessage&gt; msg = <span class="keyword">new</span> AMessage(kWhatSetDataSource, <span class="keyword">this</span>);</div><div class="line"></div><div class="line">    sp&lt;AMessage&gt; notify = <span class="keyword">new</span> AMessage(kWhatSourceNotify, <span class="keyword">this</span>);</div><div class="line"></div><div class="line">    msg-&gt;setObject(<span class="string">"source"</span>, <span class="keyword">new</span> StreamingSource(notify, source));</div><div class="line">    msg-&gt;post();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
@@ -449,6 +476,12 @@
     </div>
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NuPlayer/" rel="tag"><i class="fa fa-tag"></i> NuPlayer</a>
+          
+        </div>
       
 
       
@@ -566,7 +599,7 @@
             
             <div class="site-state-item site-state-categories">
               
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               
             </div>
@@ -577,7 +610,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>

@@ -61,9 +61,9 @@
       <category term="ffmpeg" scheme="http://yoursite.com/categories/ffmpeg/"/>
     
     
-      <category term="ffmpeg" scheme="http://yoursite.com/tags/ffmpeg/"/>
-    
       <category term="OpenSL ES" scheme="http://yoursite.com/tags/OpenSL-ES/"/>
+    
+      <category term="ffmpeg" scheme="http://yoursite.com/tags/ffmpeg/"/>
     
   </entry>
   
@@ -72,32 +72,48 @@
     <link href="http://yoursite.com/2017/06/24/FFmpeg%E6%80%BB%E7%BB%93%EF%BC%88%E5%8D%81%E4%BA%8C%EF%BC%89%E7%94%A8ffmpeg%E4%B8%8Enginx%E5%AE%9E%E7%8E%B0%E7%9B%B4%E6%92%AD%E5%A4%9A%E8%B7%AF%E6%B5%81%E5%B9%B6%E5%8F%91%E6%92%AD%E6%94%BE/"/>
     <id>http://yoursite.com/2017/06/24/FFmpeg总结（十二）用ffmpeg与nginx实现直播多路流并发播放/</id>
     <published>2017-06-24T09:31:32.000Z</published>
-    <updated>2017-06-24T09:41:28.200Z</updated>
+    <updated>2017-06-24T11:18:35.884Z</updated>
     
-    <content type="html"><![CDATA[<center><br><img src="/upload/life.jpg" alt="这里写图片描述"><br></center><br>### 下载 nginx 和 nginx-rtmp源码：<br><a href="http://nginx.org/download/nginx-1.5.10.tar.gz" target="_blank" rel="external">http://nginx.org/download/nginx-1.5.10.tar.gz</a><br><a href="https://github.com/arut/nginx-rtmp-module/archive/master.zip" target="_blank" rel="external">https://github.com/arut/nginx-rtmp-module/archive/master.zip</a><br><br><a id="more"></a><br><br>### 编译安装：<br>- cd nginx-1.5.10<br>- ./configure –with-http_ssl_module –add-module=../nginx-rtmp-module-master<br>- make<br>- make install<br><br><br>### 浏览器输入localhost:8010（默认80，由于其他服务在用，这里用8010），得到如下：<br><center><br><img src="http://img.blog.csdn.net/20170507151721696?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br></center>
+    <content type="html"><![CDATA[<center><br><img src="/upload/FinalFantasy.jpg" alt="这里写图片描述"><br></center>
+
+<p>####下载 nginx 和 nginx-rtmp源码：<br><a href="http://nginx.org/download/nginx-1.5.10.tar.gz" target="_blank" rel="external">http://nginx.org/download/nginx-1.5.10.tar.gz</a><br><a href="https://github.com/arut/nginx-rtmp-module/archive/master.zip" target="_blank" rel="external">https://github.com/arut/nginx-rtmp-module/archive/master.zip</a></p>
+<a id="more"></a>
+<p>####编译安装：</p>
+<ul>
+<li>cd nginx-1.5.10</li>
+<li>./configure –with-http_ssl_module –add-module=../nginx-rtmp-module-master</li>
+<li>make</li>
+<li>make install</li>
+</ul>
+<p>####浏览器输入localhost:8010（默认80，由于其他服务在用，这里用8010），得到如下：</p>
+<center><br><img src="http://img.blog.csdn.net/20170507151721696?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br></center>
 
 <p>配置nginx支持rtmp，找到nginx.cnf,在http节点结束后加入rtmp节点，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">rtmp &#123;</div><div class="line">    server &#123;</div><div class="line">            listen 1935;//监听1935端口</div><div class="line"></div><div class="line">            application yuiop &#123;//为什么叫yuiop？你懂的啦</div><div class="line">                    live on;</div><div class="line">                    record off;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h3 id="FFmpeg开始推流，先推一个直播流来直播"><a href="#FFmpeg开始推流，先推一个直播流来直播" class="headerlink" title="FFmpeg开始推流，先推一个直播流来直播"></a>FFmpeg开始推流，先推一个直播流来直播</h3><p>接下来开始看下服务器流是否可看，开始拉流播放<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ffplay rtmp://xxx.xxx.xxx.xxx:1935/yuiop/live</div></pre></td></tr></table></figure></p>
+<p>####FFmpeg开始推流，先推一个直播流来直播</p>
+<p>接下来开始看下服务器流是否可看，开始拉流播放<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ffplay rtmp://xxx.xxx.xxx.xxx:1935/yuiop/live</div></pre></td></tr></table></figure></p>
 <p>也可以在网页端口写点js代码，也能支持播放，效果如下：</p>
 <p><img src="http://img.blog.csdn.net/20170507161818546?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
 <p>推一个流，拉一个流不过瘾，直播可是，同时有n多个流在推拉，接着来，推拉两个，很自然也成功了。</p>
 <p><img src="http://img.blog.csdn.net/20170507161629380?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
 <p>要是用我之前<a href="http://blog.csdn.net/hejjunlin/article/details/52376462" target="_blank" rel="external">《Android Multimedia框架总结（二）MediaPlayer框架及播放网络视频案例》</a>的例子，把直播地址，传给mediaplayer，就可以在手机上看直播了。</p>
-<h3 id="最后来张全家福，本地电脑和直播服务器同时看直播，有2-3秒延迟"><a href="#最后来张全家福，本地电脑和直播服务器同时看直播，有2-3秒延迟" class="headerlink" title="最后来张全家福，本地电脑和直播服务器同时看直播，有2-3秒延迟"></a>最后来张全家福，本地电脑和直播服务器同时看直播，有2-3秒延迟</h3><p><img src="http://img.blog.csdn.net/20170507161647372?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>####最后来张全家福，本地电脑和直播服务器同时看直播，有2-3秒延迟</p>
+<p><img src="http://img.blog.csdn.net/20170507161647372?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;center&gt;&lt;br&gt;&lt;img src=&quot;/upload/life.jpg&quot; alt=&quot;这里写图片描述&quot;&gt;&lt;br&gt;&lt;/center&gt;&lt;br&gt;### 下载 nginx 和 nginx-rtmp源码：&lt;br&gt;&lt;a href=&quot;http://nginx.org/download/nginx-1.5.10.tar.gz&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://nginx.org/download/nginx-1.5.10.tar.gz&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://github.com/arut/nginx-rtmp-module/archive/master.zip&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/arut/nginx-rtmp-module/archive/master.zip&lt;/a&gt;&lt;br&gt;&lt;br&gt;
+      &lt;center&gt;&lt;br&gt;&lt;img src=&quot;/upload/FinalFantasy.jpg&quot; alt=&quot;这里写图片描述&quot;&gt;&lt;br&gt;&lt;/center&gt;
+
+&lt;p&gt;####下载 nginx 和 nginx-rtmp源码：&lt;br&gt;&lt;a href=&quot;http://nginx.org/download/nginx-1.5.10.tar.gz&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://nginx.org/download/nginx-1.5.10.tar.gz&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://github.com/arut/nginx-rtmp-module/archive/master.zip&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/arut/nginx-rtmp-module/archive/master.zip&lt;/a&gt;&lt;/p&gt;
     
     </summary>
     
       <category term="ffmpeg" scheme="http://yoursite.com/categories/ffmpeg/"/>
     
     
-      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
-    
       <category term="ffmpeg" scheme="http://yoursite.com/tags/ffmpeg/"/>
+    
+      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
     
   </entry>
   
@@ -106,15 +122,17 @@
     <link href="http://yoursite.com/2017/06/23/C-%E8%99%9A%E5%87%BD%E6%95%B0/"/>
     <id>http://yoursite.com/2017/06/23/C-虚函数/</id>
     <published>2017-06-23T09:52:45.000Z</published>
-    <updated>2017-06-24T09:14:24.654Z</updated>
+    <updated>2017-06-24T11:19:19.748Z</updated>
     
-    <content type="html"><![CDATA[<p>![此处输入图片的描述][1]</p>
+    <content type="html"><![CDATA[<center><br><img src="/upload/game.jpg" alt="这里写图片描述"><br></center>
+
 <p>为什么使用虚函数？什么是虚函数？虚函数是为了解决什么问题？</p>
 <p>面向对象的三大特征：</p>
 <ul>
 <li>封装</li>
 <li>多态</li>
-<li>继承<ul>
+<li>继承<a id="more"></a> 
+<ul>
 <li>普通虚函数</li>
 <li>虚析构函数</li>
 <li>纯虚函数</li>
@@ -128,7 +146,8 @@
 </ul>
 </li>
 </ul>
-<p>相同对象收到不同消息或不同对象收到相同消息时产生的不同的动作。<br><a id="more"></a><br>静态多态 vs 动态多态</p>
+<p>相同对象收到不同消息或不同对象收到相同消息时产生的不同的动作。</p>
+<p>静态多态 vs 动态多态</p>
 <p>[-:&gt;静态多态也叫做早绑定<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Rect</span>       //矩形类</span></div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">calcArea</span><span class="params">(<span class="keyword">int</span> width)</span></span>;</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">calcArea</span><span class="params">(<span class="keyword">int</span> width,<span class="keyword">int</span> height)</span></span>;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
 <p>如上面的代码，他们函数名相同，参数个数不同，一看就是互为重载的两个函数<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    Rect.rect;</div><div class="line">    rect.calcArea(<span class="number">10</span>);</div><div class="line">    rect.calcArea(<span class="number">10</span>,<span class="number">20</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>程序在编译阶段根据参数个数确定调用哪个函数。这种情况叫做静态多态（早绑定）</p>
@@ -187,29 +206,18 @@
     
     <summary type="html">
     
-      &lt;p&gt;![此处输入图片的描述][1]&lt;/p&gt;
+      &lt;center&gt;&lt;br&gt;&lt;img src=&quot;/upload/game.jpg&quot; alt=&quot;这里写图片描述&quot;&gt;&lt;br&gt;&lt;/center&gt;
+
 &lt;p&gt;为什么使用虚函数？什么是虚函数？虚函数是为了解决什么问题？&lt;/p&gt;
 &lt;p&gt;面向对象的三大特征：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;封装&lt;/li&gt;
 &lt;li&gt;多态&lt;/li&gt;
-&lt;li&gt;继承&lt;ul&gt;
-&lt;li&gt;普通虚函数&lt;/li&gt;
-&lt;li&gt;虚析构函数&lt;/li&gt;
-&lt;li&gt;纯虚函数&lt;/li&gt;
-&lt;li&gt;抽象类&lt;/li&gt;
-&lt;li&gt;接口类&lt;/li&gt;
-&lt;li&gt;隐藏 vs 覆盖&lt;/li&gt;
-&lt;li&gt;隐藏与覆盖之间的关系&lt;/li&gt;
-&lt;li&gt;早绑定和晚绑定&lt;/li&gt;
-&lt;li&gt;虚函数表&lt;/li&gt;
-&lt;li&gt;什么是多态?&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;相同对象收到不同消息或不同对象收到相同消息时产生的不同的动作。&lt;br&gt;
+&lt;li&gt;继承
     
     </summary>
+    
+      <category term="C++" scheme="http://yoursite.com/categories/C/"/>
     
     
       <category term="虚函数" scheme="http://yoursite.com/tags/%E8%99%9A%E5%87%BD%E6%95%B0/"/>
@@ -221,9 +229,11 @@
     <link href="http://yoursite.com/2017/06/23/Android-Multimedia%E6%A1%86%E6%9E%B6%E6%80%BB%E7%BB%93%EF%BC%88%E4%BA%8C%E5%8D%81%E5%85%AB%EF%BC%89NuPlayer%E5%88%B0OMX%E8%BF%87%E7%A8%8B/"/>
     <id>http://yoursite.com/2017/06/23/Android-Multimedia框架总结（二十八）NuPlayer到OMX过程/</id>
     <published>2017-06-23T09:36:06.000Z</published>
-    <updated>2017-06-23T10:15:44.767Z</updated>
+    <updated>2017-06-24T11:19:46.802Z</updated>
     
-    <content type="html"><![CDATA[<p>NuPlayer是谷歌新研发的。<br>AwesomePlayer存在BUG，谷歌早已在android M版本中弃用。<br><a id="more"></a><br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">sp&lt;MediaPlayerBase&gt; MediaPlayerService::Client::createPlayer(player_type playerType)</div><div class="line">&#123;</div><div class="line">    <span class="comment">// determine if we have the right player type</span></div><div class="line">    sp&lt;MediaPlayerBase&gt; p = mPlayer;</div><div class="line">    <span class="keyword">if</span> ((p != <span class="literal">NULL</span>) &amp;&amp; (p-&gt;playerType() != playerType)) &#123;</div><div class="line">        ALOGV(<span class="string">"delete player"</span>);</div><div class="line">        p.clear();</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (p == <span class="literal">NULL</span>) &#123;</div><div class="line">        p = MediaPlayerFactory::createPlayer(playerType, <span class="keyword">this</span>, notify, mPid);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (p != <span class="literal">NULL</span>) &#123;</div><div class="line">        p-&gt;setUID(mUID);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> p;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+    <content type="html"><![CDATA[<center><br><img src="/upload/Knight.jpg" alt="这里写图片描述"><br></center>
+
+<p>NuPlayer是谷歌新研发的。<br>AwesomePlayer存在BUG，谷歌早已在android M版本中弃用。<br><a id="more"></a><br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">sp&lt;MediaPlayerBase&gt; MediaPlayerService::Client::createPlayer(player_type playerType)</div><div class="line">&#123;</div><div class="line">    <span class="comment">// determine if we have the right player type</span></div><div class="line">    sp&lt;MediaPlayerBase&gt; p = mPlayer;</div><div class="line">    <span class="keyword">if</span> ((p != <span class="literal">NULL</span>) &amp;&amp; (p-&gt;playerType() != playerType)) &#123;</div><div class="line">        ALOGV(<span class="string">"delete player"</span>);</div><div class="line">        p.clear();</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (p == <span class="literal">NULL</span>) &#123;</div><div class="line">        p = MediaPlayerFactory::createPlayer(playerType, <span class="keyword">this</span>, notify, mPid);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (p != <span class="literal">NULL</span>) &#123;</div><div class="line">        p-&gt;setUID(mUID);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> p;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>NuPlayerDriver构造时，new NuPlayer<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">NuPlayerDriver::NuPlayerDriver()</div><div class="line">    : mState(STATE_IDLE),</div><div class="line">      mIsAsyncPrepare(<span class="literal">false</span>),</div><div class="line">      mAsyncResult(UNKNOWN_ERROR),</div><div class="line">      mSetSurfaceInProgress(<span class="literal">false</span>),</div><div class="line">      mDurationUs(<span class="number">-1</span>),</div><div class="line">      mPositionUs(<span class="number">-1</span>),</div><div class="line">      mNumFramesTotal(<span class="number">0</span>),</div><div class="line">      mNumFramesDropped(<span class="number">0</span>),</div><div class="line">      mLooper(<span class="keyword">new</span> ALooper),</div><div class="line">      mPlayerFlags(<span class="number">0</span>),</div><div class="line">      mAtEOS(<span class="literal">false</span>),</div><div class="line">      mStartupSeekTimeUs(<span class="number">-1</span>) &#123;</div><div class="line">    mLooper-&gt;setName(<span class="string">"NuPlayerDriver Looper"</span>);</div><div class="line"></div><div class="line">    mLooper-&gt;start(</div><div class="line">            <span class="literal">false</span>, <span class="comment">/* runOnCallingThread */</span></div><div class="line">            <span class="literal">true</span>,  <span class="comment">/* canCallJava */</span></div><div class="line">            PRIORITY_AUDIO);</div><div class="line"></div><div class="line">    mPlayer = <span class="keyword">new</span> NuPlayer;</div><div class="line">    mLooper-&gt;registerHandler(mPlayer);</div><div class="line"></div><div class="line">    mPlayer-&gt;setDriver(<span class="keyword">this</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>NuPlayer.h<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">NuPlayer</span> :</span> <span class="keyword">public</span> AHandler &#123;</div><div class="line">    NuPlayer(<span class="keyword">pid_t</span> pid);</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setUID</span><span class="params">(<span class="keyword">uid_t</span> uid)</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setDriver</span><span class="params">(<span class="keyword">const</span> wp&lt;NuPlayerDriver&gt; &amp;driver)</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setDataSourceAsync</span><span class="params">(<span class="keyword">const</span> sp&lt;IStreamSource&gt; &amp;source)</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setDataSourceAsync</span><span class="params">(</span></span></div><div class="line">            <span class="keyword">const</span> sp&lt;IMediaHTTPService&gt; &amp;httpService,</div><div class="line">            <span class="keyword">const</span> <span class="keyword">char</span> *url,</div><div class="line">            <span class="keyword">const</span> KeyedVector&lt;String8, String8&gt; *headers);</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setDataSourceAsync</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int64_t</span> offset, <span class="keyword">int64_t</span> length)</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setDataSourceAsync</span><span class="params">(<span class="keyword">const</span> sp&lt;DataSource&gt; &amp;source)</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">prepareAsync</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setVideoSurfaceTextureAsync</span><span class="params">(</span></span></div><div class="line">            <span class="keyword">const</span> sp&lt;IGraphicBufferProducer&gt; &amp;bufferProducer);</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setAudioSink</span><span class="params">(<span class="keyword">const</span> sp&lt;MediaPlayerBase::AudioSink&gt; &amp;sink)</span></span>;</div><div class="line">    <span class="keyword">status_t</span> setPlaybackSettings(<span class="keyword">const</span> AudioPlaybackRate &amp;rate);</div><div class="line">    <span class="keyword">status_t</span> getPlaybackSettings(AudioPlaybackRate *rate <span class="comment">/* nonnull */</span>);</div><div class="line">    <span class="keyword">status_t</span> setSyncSettings(<span class="keyword">const</span> AVSyncSettings &amp;sync, <span class="keyword">float</span> videoFpsHint);</div><div class="line">    <span class="keyword">status_t</span> getSyncSettings(AVSyncSettings *sync <span class="comment">/* nonnull */</span>, <span class="keyword">float</span> *videoFps <span class="comment">/* nonnull */</span>);</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">start</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pause</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="comment">// Will notify the driver through "notifyResetComplete" once finished.</span></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">resetAsync</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="comment">// Will notify the driver through "notifySeekComplete" once finished</span></div><div class="line">    <span class="comment">// and needNotify is true.</span></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">seekToAsync</span><span class="params">(<span class="keyword">int64_t</span> seekTimeUs, <span class="keyword">bool</span> needNotify = <span class="literal">false</span>)</span></span>;</div><div class="line"></div><div class="line">    <span class="keyword">status_t</span> setVideoScalingMode(<span class="keyword">int32_t</span> mode);</div><div class="line">    <span class="keyword">status_t</span> getTrackInfo(Parcel* reply) <span class="keyword">const</span>;</div><div class="line">    <span class="keyword">status_t</span> getSelectedTrack(<span class="keyword">int32_t</span> type, Parcel* reply) <span class="keyword">const</span>;</div><div class="line">    <span class="keyword">status_t</span> selectTrack(<span class="keyword">size_t</span> trackIndex, <span class="keyword">bool</span> select, <span class="keyword">int64_t</span> timeUs);</div><div class="line">    <span class="keyword">status_t</span> getCurrentPosition(<span class="keyword">int64_t</span> *mediaUs);</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">getStats</span><span class="params">(Vector&lt;sp&lt;AMessage&gt; &gt; *mTrackStats)</span></span>;</div><div class="line"></div><div class="line">    sp&lt;MetaData&gt; getFileMeta();</div><div class="line">    <span class="function"><span class="keyword">float</span> <span class="title">getFrameRate</span><span class="params">()</span></span>;</div></pre></td></tr></table></figure></p>
 <p>当调用setDataSource时，<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> NuPlayer::setDataSourceAsync(<span class="keyword">const</span> sp&lt;IStreamSource&gt; &amp;source) &#123;</div><div class="line">    sp&lt;AMessage&gt; msg = <span class="keyword">new</span> AMessage(kWhatSetDataSource, <span class="keyword">this</span>);</div><div class="line"></div><div class="line">    sp&lt;AMessage&gt; notify = <span class="keyword">new</span> AMessage(kWhatSourceNotify, <span class="keyword">this</span>);</div><div class="line"></div><div class="line">    msg-&gt;setObject(<span class="string">"source"</span>, <span class="keyword">new</span> StreamingSource(notify, source));</div><div class="line">    msg-&gt;post();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
@@ -245,10 +255,16 @@
     
     <summary type="html">
     
-      &lt;p&gt;NuPlayer是谷歌新研发的。&lt;br&gt;AwesomePlayer存在BUG，谷歌早已在android M版本中弃用。&lt;br&gt;
+      &lt;center&gt;&lt;br&gt;&lt;img src=&quot;/upload/Knight.jpg&quot; alt=&quot;这里写图片描述&quot;&gt;&lt;br&gt;&lt;/center&gt;
+
+&lt;p&gt;NuPlayer是谷歌新研发的。&lt;br&gt;AwesomePlayer存在BUG，谷歌早已在android M版本中弃用。&lt;br&gt;
     
     </summary>
     
+      <category term="Android Multimedia" scheme="http://yoursite.com/categories/Android-Multimedia/"/>
+    
+    
+      <category term="NuPlayer" scheme="http://yoursite.com/tags/NuPlayer/"/>
     
   </entry>
   
