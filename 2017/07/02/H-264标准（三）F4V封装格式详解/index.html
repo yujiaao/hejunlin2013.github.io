@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="ffmpeg,nginx," />
+  <meta name="keywords" content="F4V格式," />
 
 
 
@@ -95,23 +95,33 @@
 
 
 
-<meta name="description" content="一、下载 nginx 和 nginx-rtmp源码：http://nginx.org/download/nginx-1.5.10.tar.gzhttps://github.com/arut/nginx-rtmp-module/archive/master.zip">
-<meta name="keywords" content="ffmpeg,nginx">
+<meta name="description" content="F4V是Adobe公司为了迎接高清时代而推出继FLV格式后的支持H.264的流媒体格式。它和FLV主要的区别在于，FLV格式采用的是H263编码，而F4V则支持H.264编码的高清晰视频，码率最高可达50Mbps。 由于采用H264高清编码，相比于传统的FLV，F4V在同等体积的前提下，能够实现更高的分辨率，并支持更高比特率。随着网络带宽的发展和视频网站的发展，以及人们对视频清晰度越来越高的要">
+<meta name="keywords" content="F4V格式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="FFmpeg总结（十二）用ffmpeg与nginx实现直播多路流并发播放">
-<meta property="og:url" content="http://yoursite.com/2017/06/24/FFmpeg总结（十二）用ffmpeg与nginx实现直播多路流并发播放/index.html">
+<meta property="og:title" content="H.264标准（三）F4V封装格式详解">
+<meta property="og:url" content="http://yoursite.com/2017/07/02/H-264标准（三）F4V封装格式详解/index.html">
 <meta property="og:site_name" content="逆流的鱼yuiop">
-<meta property="og:description" content="一、下载 nginx 和 nginx-rtmp源码：http://nginx.org/download/nginx-1.5.10.tar.gzhttps://github.com/arut/nginx-rtmp-module/archive/master.zip">
-<meta property="og:image" content="http://yoursite.com/upload/FinalFantasy.jpg">
-<meta property="og:image" content="http://img.blog.csdn.net/20170507151721696?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:image" content="http://img.blog.csdn.net/20170507161818546?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:image" content="http://img.blog.csdn.net/20170507161629380?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:image" content="http://img.blog.csdn.net/20170507161647372?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:updated_time" content="2017-06-24T11:23:06.079Z">
+<meta property="og:description" content="F4V是Adobe公司为了迎接高清时代而推出继FLV格式后的支持H.264的流媒体格式。它和FLV主要的区别在于，FLV格式采用的是H263编码，而F4V则支持H.264编码的高清晰视频，码率最高可达50Mbps。 由于采用H264高清编码，相比于传统的FLV，F4V在同等体积的前提下，能够实现更高的分辨率，并支持更高比特率。随着网络带宽的发展和视频网站的发展，以及人们对视频清晰度越来越高的要">
+<meta property="og:image" content="http://yoursite.com/upload/Warcraft.jpg">
+<meta property="og:image" content="http://img.blog.csdn.net/20170702165754485?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170702165807299?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170702165819601?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170702165830569?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170702165843481?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170702165855052?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170702165902855?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170702165911802?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170702165920996?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170702165932942?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170702165942518?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170702165951092?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170702170001639?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170702170017030?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-07-02T09:42:25.618Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="FFmpeg总结（十二）用ffmpeg与nginx实现直播多路流并发播放">
-<meta name="twitter:description" content="一、下载 nginx 和 nginx-rtmp源码：http://nginx.org/download/nginx-1.5.10.tar.gzhttps://github.com/arut/nginx-rtmp-module/archive/master.zip">
-<meta name="twitter:image" content="http://yoursite.com/upload/FinalFantasy.jpg">
+<meta name="twitter:title" content="H.264标准（三）F4V封装格式详解">
+<meta name="twitter:description" content="F4V是Adobe公司为了迎接高清时代而推出继FLV格式后的支持H.264的流媒体格式。它和FLV主要的区别在于，FLV格式采用的是H263编码，而F4V则支持H.264编码的高清晰视频，码率最高可达50Mbps。 由于采用H264高清编码，相比于传统的FLV，F4V在同等体积的前提下，能够实现更高的分辨率，并支持更高比特率。随着网络带宽的发展和视频网站的发展，以及人们对视频清晰度越来越高的要">
+<meta name="twitter:image" content="http://yoursite.com/upload/Warcraft.jpg">
 
 
 
@@ -139,13 +149,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/06/24/FFmpeg总结（十二）用ffmpeg与nginx实现直播多路流并发播放/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/07/02/H-264标准（三）F4V封装格式详解/"/>
 
 
 
 
 
-  <title>FFmpeg总结（十二）用ffmpeg与nginx实现直播多路流并发播放 | 逆流的鱼yuiop</title>
+  <title>H.264标准（三）F4V封装格式详解 | 逆流的鱼yuiop</title>
   
 
 
@@ -284,7 +294,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/24/FFmpeg总结（十二）用ffmpeg与nginx实现直播多路流并发播放/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/02/H-264标准（三）F4V封装格式详解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="逆流的鱼yuiop">
@@ -301,7 +311,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">FFmpeg总结（十二）用ffmpeg与nginx实现直播多路流并发播放</h1>
+          <h1 class="post-title" itemprop="name headline">H.264标准（三）F4V封装格式详解</h1>
         
 
         <div class="post-meta">
@@ -313,8 +323,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-24T17:31:32+08:00">
-                2017-06-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-02T17:27:32+08:00">
+                2017-07-02
               </time>
             
 
@@ -336,8 +346,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ffmpeg/" itemprop="url" rel="index">
-                    <span itemprop="name">ffmpeg</span>
+                  <a href="/categories/H-264标准/" itemprop="url" rel="index">
+                    <span itemprop="name">H.264标准</span>
                   </a>
                 </span>
 
@@ -353,7 +363,7 @@
 
           
           
-             <span id="/2017/06/24/FFmpeg总结（十二）用ffmpeg与nginx实现直播多路流并发播放/" class="leancloud_visitors" data-flag-title="FFmpeg总结（十二）用ffmpeg与nginx实现直播多路流并发播放">
+             <span id="/2017/07/02/H-264标准（三）F4V封装格式详解/" class="leancloud_visitors" data-flag-title="H.264标准（三）F4V封装格式详解">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -384,7 +394,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  310
+                  755
                 </span>
               
 
@@ -400,7 +410,7 @@
                   <span class="post-meta-item-text">阅读时长</span>
                 
                 <span title="阅读时长">
-                  1
+                  3
                 </span>
               
             </div>
@@ -418,30 +428,41 @@
       
 
       
-        <center><br><img src="/upload/FinalFantasy.jpg" alt="这里写图片描述"><br></center>
+        <center><br><img src="/upload/Warcraft.jpg" alt="这里写图片描述"><br></center>
 
-<p>一、下载 nginx 和 nginx-rtmp源码：<br><a href="http://nginx.org/download/nginx-1.5.10.tar.gz" target="_blank" rel="external">http://nginx.org/download/nginx-1.5.10.tar.gz</a><br><a href="https://github.com/arut/nginx-rtmp-module/archive/master.zip" target="_blank" rel="external">https://github.com/arut/nginx-rtmp-module/archive/master.zip</a></p>
-<a id="more"></a>
-<p>二、编译安装：</p>
-<ul>
-<li>cd nginx-1.5.10</li>
-<li>./configure –with-http_ssl_module –add-module=../nginx-rtmp-module-master</li>
-<li>make</li>
-<li>make install</li>
-</ul>
-<p>三、浏览器输入localhost:8010（默认80，由于其他服务在用，这里用8010），得到如下：</p>
-<center><br><img src="http://img.blog.csdn.net/20170507151721696?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br></center>
-
-<p>配置nginx支持rtmp，找到nginx.cnf,在http节点结束后加入rtmp节点，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">rtmp &#123;</div><div class="line">    server &#123;</div><div class="line">            listen 1935;//监听1935端口</div><div class="line"></div><div class="line">            application yuiop &#123;//为什么叫yuiop？你懂的啦</div><div class="line">                    live on;</div><div class="line">                    record off;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>四、FFmpeg开始推流，先推一个直播流来直播</p>
-<p>接下来开始看下服务器流是否可看，开始拉流播放<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ffplay rtmp://xxx.xxx.xxx.xxx:1935/yuiop/live</div></pre></td></tr></table></figure></p>
-<p>也可以在网页端口写点js代码，也能支持播放，效果如下：</p>
-<p><img src="http://img.blog.csdn.net/20170507161818546?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<p>推一个流，拉一个流不过瘾，直播可是，同时有n多个流在推拉，接着来，推拉两个，很自然也成功了。</p>
-<p><img src="http://img.blog.csdn.net/20170507161629380?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<p>要是用我之前<a href="http://blog.csdn.net/hejjunlin/article/details/52376462" target="_blank" rel="external">《Android Multimedia框架总结（二）MediaPlayer框架及播放网络视频案例》</a>的例子，把直播地址，传给mediaplayer，就可以在手机上看直播了。</p>
-<p>五、最后来张全家福，本地电脑和直播服务器同时看直播，有2-3秒延迟</p>
-<p><img src="http://img.blog.csdn.net/20170507161647372?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>F4V是Adobe公司为了迎接高清时代而推出继FLV格式后的支持H.264的流媒体格式。它和FLV主要的区别在于，FLV格式采用的是H263编码，而F4V则支持H.264编码的高清晰视频，码率最高可达50Mbps。</p>
+<p>由于采用H264高清编码，相比于传统的FLV，F4V在同等体积的前提下，能够实现更高的分辨率，并支持更高比特率。随着网络带宽的发展和视频网站的发展，以及人们对视频清晰度越来越高的要求，F4V已经不断取代FLV，流传于更大视频网站，成为网络流媒体主流格式。</p>
+<p>但由于F4V的新兴，各大视频网站采用的F4V标准非常之多，也决定了F4V相比于传统FLV，兼容能力相对还较弱。<br><a id="more"></a><br>需要注意的是，F4V 和MP4 是兼容的格式，都属于ISMAMP4 容器，但是 F4V 只用来封装H.264视频编码和音频AAC。</p>
+<p>FLV 是Adobe 私有格式，但是也可以用来封装 H.264视频编码、AAC音频编码或H.263视频编码、MP3音频编码。</p>
+<p>所以不能看到扩展名为 flv 就认为不是H.264 编码的F4V，网络上很多后缀FLV的视频，其实质是更高清晰度的F4V。</p>
+<p>F4V格式：</p>
+<p><img src="http://img.blog.csdn.net/20170702165754485?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>F4V是基于ISO MP4格式。ftyp box帮助识别一个特殊文件<br>FlashPlayer不要求强制有ftyp box，只要在在它所支持的编解码类型的限制之内。</p>
+<p><img src="http://img.blog.csdn.net/20170702165807299?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>moov box，FLV文件，仅包含一个moov box, 一个moov box包含一个或多个其他的box.</p>
+<p><img src="http://img.blog.csdn.net/20170702165819601?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>mvhd box ，FLV文件，仅包含一个mvhd box, mvhd box位于mooov box中，定义了playback相关信息，用于正个F4V文件中。</p>
+<p><img src="http://img.blog.csdn.net/20170702165830569?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>trck box，FLV文件，仅包含一个mvhd box, mvhd box位于trck box中，定义了F4V文件中一个单独track对应的信息，并且包含其他box,</p>
+<p><img src="http://img.blog.csdn.net/20170702165843481?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>mdia box, 每个trck box仅含一个mdia box，并且包含其他box, 定义了media track属性</p>
+<p><img src="http://img.blog.csdn.net/20170702165855052?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>minf box，每个mdia box仅含一个 minf box, 并且包含其他box, 定义了 track’s media信息</p>
+<p><img src="http://img.blog.csdn.net/20170702165902855?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>tkhd box, 每个trck box仅含一个mdia box，定义了一个track主要属性。</p>
+<p><img src="http://img.blog.csdn.net/20170702165911802?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>mdhd box, 每个mdia box仅含一个mdhd box，定义了一个media track的属性。</p>
+<p><img src="http://img.blog.csdn.net/20170702165920996?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>stbl box，每个minf box仅含一个stbl box，并且包含其他box, 定义了构建一个track所须要的属性</p>
+<p><img src="http://img.blog.csdn.net/20170702165932942?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>stsd box，每个stbl box仅含一个stsd box，定义了一个sample table中sample描述，一个stsd box包含一个track大量描述，每个包含在track中的media type都对应有一个。</p>
+<p><img src="http://img.blog.csdn.net/20170702165942518?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>stsc box， 每个stbl box仅含一个stsc box，定义了sample对应chunk的映射信息。</p>
+<p><img src="http://img.blog.csdn.net/20170702165951092?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>stts box， 每个stbl box仅含一个stsc box，定义了一个sample table中的time-to-sample映射信息。</p>
+<p><img src="http://img.blog.csdn.net/20170702170001639?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>ctts box , 每个stbl box最多含有一个 ctts box ，也可没有，前面介绍的box都是必须要有的。ctts box定义了一个time-to-sample映射的组合信息。</p>
+<p><img src="http://img.blog.csdn.net/20170702170017030?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGVqanVubGlu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
 
       
     </div>
@@ -497,9 +518,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/ffmpeg/" rel="tag"><i class="fa fa-tag"></i> ffmpeg</a>
-          
-            <a href="/tags/nginx/" rel="tag"><i class="fa fa-tag"></i> nginx</a>
+            <a href="/tags/F4V格式/" rel="tag"><i class="fa fa-tag"></i> F4V格式</a>
           
         </div>
       
@@ -512,8 +531,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/23/C-虚函数/" rel="next" title="C++虚函数">
-                <i class="fa fa-chevron-left"></i> C++虚函数
+              <a href="/2017/06/24/FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流/" rel="next" title="FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流">
+                <i class="fa fa-chevron-left"></i> FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流
               </a>
             
           </div>
@@ -521,10 +540,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/06/24/FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流/" rel="prev" title="FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流">
-                FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
