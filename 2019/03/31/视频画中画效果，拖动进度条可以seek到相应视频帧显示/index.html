@@ -106,8 +106,8 @@
 <meta property="og:image" content="http://www.itsmartfish.com/upload/guiqi.jpg">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/10/166fdf6653b8fbb5?w=1080&h=608&f=webp&s=27740">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/10/166fe058c9ce51dd?w=210&h=383&f=gif&s=109257">
-<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/30/166c29dde586e441?imageslim">
-<meta property="og:updated_time" content="2019-03-31T14:06:05.925Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/424500-4d9cea92c3fc51ea.png?imageMogr2/auto-orient/">
+<meta property="og:updated_time" content="2019-03-31T14:11:50.054Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="视频画中画效果，拖动进度条可以seek到相应视频帧显示">
 <meta name="twitter:description" content="在视频开发中，我们常常看到这样的效果，拖动进度条时，或是在进度条上方或是在屏幕中间，显示拖动进度条位置时刻的某一帧画面。">
@@ -431,7 +431,7 @@
 <p>需要注意的是，取帧是个耗时的操作，需要放到子线程中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();</span><br><span class="line">mmr.setDataSource(mUri);</span><br><span class="line"></span><br><span class="line">//获取第一帧原尺寸图片</span><br><span class="line">mmrc.getFrameAtTime();</span><br><span class="line"></span><br><span class="line">//获取指定位置的原尺寸图片 注意这里传的timeUs是微秒</span><br><span class="line">mmrc.getFrameAtTime(timeUs, option);</span><br><span class="line"></span><br><span class="line">//获取指定位置指定宽高的缩略图</span><br><span class="line">mmrc.getScaledFrameAtTime(timeUs, MediaMetadataRetrieverCompat.OPTION_CLOSEST, width, height);</span><br><span class="line"></span><br><span class="line">//获取指定位置指定宽高并且旋转的缩略图</span><br><span class="line">mmrc.getScaledFrameAtTime(timeUs, MediaMetadataRetrieverCompat.OPTION_CLOSEST, width, height, rotate);</span><br></pre></td></tr></table></figure></p>
 <p>Demo效果图：<br><img src="https://user-gold-cdn.xitu.io/2018/11/10/166fe058c9ce51dd?w=210&amp;h=383&amp;f=gif&amp;s=109257" alt></p>
 <p>推荐书籍（亚马逊、京东、天猫、当当均有售）：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/10/30/166c29dde586e441?imageslim" alt="image.png"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/424500-4d9cea92c3fc51ea.png?imageMogr2/auto-orient/" alt="image.png"></p>
 <blockquote>
 <p>内容简介：近年来，直播、短视频行业的相关业务发展迅猛，本书主要介绍其中涉及的Android音视频开发相关技术。本书一共有11章，分别介绍了音视频基础知识、MediaPlayer、MediaPlayerService、StagefrightPlayer、NuPlayer、OpenMAX框架、FFmpeg项目、FFmpeg源码分析及实战、直播技术、H.264编码及H.265编码、视频格式分析内容。希望本书能帮助读者系统学习、化繁为简，在Android音视频开发的道路上不断进步。</p>
 </blockquote>
