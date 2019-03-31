@@ -95,22 +95,22 @@
 
 
 
-<meta name="description" content="在视频开发中，我们常常看到这样的效果，拖动进度条时，或是在进度条上方或是在屏幕中间，显示拖动进度条位置时刻的某一帧画面。 这个需求，如果是你，你会如何做？ 通常一个需求，不仅要考虑实现，还有考虑一些是否有性能上影响。 下面我想到的4个方案：">
+<meta name="description" content="在视频开发中，我们常常看到这样的效果，拖动进度条时，或是在进度条上方或是在屏幕中间，显示拖动进度条位置时刻的某一帧画面。">
 <meta name="keywords" content="FFmpeg">
 <meta property="og:type" content="article">
 <meta property="og:title" content="视频画中画效果，拖动进度条可以seek到相应视频帧显示">
 <meta property="og:url" content="http://yoursite.com/2019/03/31/视频画中画效果，拖动进度条可以seek到相应视频帧显示/index.html">
 <meta property="og:site_name" content="逆流的鱼yuiop">
-<meta property="og:description" content="在视频开发中，我们常常看到这样的效果，拖动进度条时，或是在进度条上方或是在屏幕中间，显示拖动进度条位置时刻的某一帧画面。 这个需求，如果是你，你会如何做？ 通常一个需求，不仅要考虑实现，还有考虑一些是否有性能上影响。 下面我想到的4个方案：">
+<meta property="og:description" content="在视频开发中，我们常常看到这样的效果，拖动进度条时，或是在进度条上方或是在屏幕中间，显示拖动进度条位置时刻的某一帧画面。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/upload/guiqi.jpg">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/10/166fdf6653b8fbb5?w=1080&h=608&f=webp&s=27740">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/10/166fe058c9ce51dd?w=210&h=383&f=gif&s=109257">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/10/166fe13bb89d253f?w=460&h=613&f=webp&s=29016">
-<meta property="og:updated_time" content="2019-03-31T13:14:38.660Z">
+<meta property="og:updated_time" content="2019-03-31T13:17:32.228Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="视频画中画效果，拖动进度条可以seek到相应视频帧显示">
-<meta name="twitter:description" content="在视频开发中，我们常常看到这样的效果，拖动进度条时，或是在进度条上方或是在屏幕中间，显示拖动进度条位置时刻的某一帧画面。 这个需求，如果是你，你会如何做？ 通常一个需求，不仅要考虑实现，还有考虑一些是否有性能上影响。 下面我想到的4个方案：">
+<meta name="twitter:description" content="在视频开发中，我们常常看到这样的效果，拖动进度条时，或是在进度条上方或是在屏幕中间，显示拖动进度条位置时刻的某一帧画面。">
 <meta name="twitter:image" content="http://yoursite.com/upload/guiqi.jpg">
 
 
@@ -420,10 +420,11 @@
       
         <center><br><img src="/upload/guiqi.jpg" alt="这里写图片描述"><br></center>
 
-<p>在视频开发中，我们常常看到这样的效果，拖动进度条时，或是在进度条上方或是在屏幕中间，显示拖动进度条位置时刻的某一帧画面。<br><img src="https://user-gold-cdn.xitu.io/2018/11/10/166fdf6653b8fbb5?w=1080&amp;h=608&amp;f=webp&amp;s=27740" alt></p>
+<p>在视频开发中，我们常常看到这样的效果，拖动进度条时，或是在进度条上方或是在屏幕中间，显示拖动进度条位置时刻的某一帧画面。<br><a id="more"></a><br><img src="https://user-gold-cdn.xitu.io/2018/11/10/166fdf6653b8fbb5?w=1080&amp;h=608&amp;f=webp&amp;s=27740" alt></p>
 <p>这个需求，如果是你，你会如何做？</p>
 <p>通常一个需求，不仅要考虑实现，还有考虑一些是否有性能上影响。</p>
-<p>下面我想到的4个方案：<br><a id="more"></a><br>1、在拖动过程中，可以通过TextureView来显示预览图，拖动进度条到某个position后，通过textureView.getBitmap()拿到对应的截图，用于展示。</p>
+<p>下面我想到的4个方案：</p>
+<p>1、在拖动过程中，可以通过TextureView来显示预览图，拖动进度条到某个position后，通过textureView.getBitmap()拿到对应的截图，用于展示。</p>
 <p>2、通过MediaMetadataRetriever 只能获取你指定时间的附近的关键帧（Key frame）<br>MediaMetadataRetriever mmr = new MediaMetadataRetriever();<br>mmr.setDataSource(renderOutputFilePath);<br>mmr.getFrameAtTime(1x1000x1000,OPTION_CLOSEST_SYNC );//获取1秒附近的关键帧，注意，只是附近，获取不到精确位置的图片。但是用于预览也够了</p>
 <p>3、通过GLSurfaceView，拖到到某个事件点后，来onDrawFrame，这种方式比较高效。</p>
 <p>4、FFmpeg实现，获取某个位置的picture，github上有封装好的实现此功能的库，类似和MediaMetadataRetriever一样的用法，可以更精准，高效。<br>链接：<a href="https://github.com/wseemann/FFmpegMediaMetadataRetriever，" target="_blank" rel="noopener">https://github.com/wseemann/FFmpegMediaMetadataRetriever，</a><br>原理就是取某个timebase的关键帧。然后回调出去展示。</p>
