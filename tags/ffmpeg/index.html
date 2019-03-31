@@ -98,7 +98,7 @@
 <meta name="description" content="鱼哥，93后，目前在深圳已经上车，个人微信：smartfish2018，如果你不想仅仅称为码农，以及程序员快速成长，建议关注扫下面二维码，关注公号“何俊林”，关注后，公号后台回复“666”，还可以获得程序员专属大礼包~">
 <meta property="og:type" content="website">
 <meta property="og:title" content="逆流的鱼yuiop">
-<meta property="og:url" content="http://yoursite.com/tags/ffmpeg/index.html">
+<meta property="og:url" content="http://yoursite.com/tags/FFmpeg/index.html">
 <meta property="og:site_name" content="逆流的鱼yuiop">
 <meta property="og:description" content="鱼哥，93后，目前在深圳已经上车，个人微信：smartfish2018，如果你不想仅仅称为码农，以及程序员快速成长，建议关注扫下面二维码，关注公号“何俊林”，关注后，公号后台回复“666”，还可以获得程序员专属大礼包~">
 <meta property="og:locale" content="zh-Hans">
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/ffmpeg/">
+  <link rel="canonical" href="http://yoursite.com/tags/FFmpeg/">
 
 
 
 
 
-  <title>标签: ffmpeg | 逆流的鱼yuiop</title>
+  <title>标签: FFmpeg | 逆流的鱼yuiop</title>
   
 
 
@@ -269,7 +269,7 @@
 
   <div id="posts" class="posts-collapse">
     <div class="collection-title">
-      <h1>ffmpeg<small>标签</small>
+      <h1>FFmpeg<small>标签</small>
       </h1>
     </div>
 
@@ -281,43 +281,17 @@
 
       <h2 class="post-title">
         
-            <a class="post-title-link" href="/2017/06/24/FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流/" itemprop="url">
+            <a class="post-title-link" href="/2019/03/31/ijkplayer如何使用FFmpeg-4-0内核？/" itemprop="url">
               
-                <span itemprop="name">FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-06-24T17:44:43+08:00" content="2017-06-24">
-          06-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/06/24/FFmpeg总结（十二）用ffmpeg与nginx实现直播多路流并发播放/" itemprop="url">
-              
-                <span itemprop="name">FFmpeg总结（十二）用ffmpeg与nginx实现直播多路流并发播放</span>
+                <span itemprop="name">ijkplayer如何使用FFmpeg 4.0内核？</span>
               
             </a>
         
       </h2>
 
       <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-06-24T17:31:32+08:00" content="2017-06-24">
-          06-24
+        <time class="post-time" itemprop="dateCreated" datetime="2019-03-31T21:02:54+08:00" content="2019-03-31">
+          03-31
         </time>
       </div>
 
@@ -380,7 +354,7 @@
             
             <div class="site-state-item site-state-categories">
               
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">分类</span>
               
             </div>
@@ -391,7 +365,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -727,6 +701,47 @@
             newcounter.set("url", url);
             newcounter.set("time", 1);
             newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+  newcounter.save(null, {
               success: function(newcounter) {
                 var $element = $(document.getElementById(url));
                 $element.find('.leancloud-visitors-count').text(newcounter.get('time'));

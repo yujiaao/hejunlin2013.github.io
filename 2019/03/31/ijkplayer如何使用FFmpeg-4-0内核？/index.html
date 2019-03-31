@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="FFmpeg,">
 
 
 
@@ -95,16 +95,21 @@
 
 
 
-<meta name="description" content="鱼哥，93后，目前在深圳已经上车，个人微信：smartfish2018，如果你不想仅仅称为码农，以及程序员快速成长，建议关注扫下面二维码，关注公号“何俊林”，关注后，公号后台回复“666”，还可以获得程序员专属大礼包~">
-<meta property="og:type" content="website">
-<meta property="og:title" content="逆流的鱼yuiop">
-<meta property="og:url" content="http://yoursite.com/archives/2017/06/index.html">
+<meta name="description" content="相信不少使用ijkplayer的朋友，都在埋怨，很多issue没有人去解，master上分支已经停留在201801月，这现在一年都快过去了，官方不维护了么？其实，人家一直在维护和更新。只不过ijkplayer是基于FFmpeg作为内核。上层ijkplayer封装的东西，改动性没有那么大，出问题，也都是在底层FFmpeg改。如Demux，Codec等，还有各种协议。">
+<meta name="keywords" content="FFmpeg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ijkplayer如何使用FFmpeg 4.0内核？">
+<meta property="og:url" content="http://yoursite.com/2019/03/31/ijkplayer如何使用FFmpeg-4-0内核？/index.html">
 <meta property="og:site_name" content="逆流的鱼yuiop">
-<meta property="og:description" content="鱼哥，93后，目前在深圳已经上车，个人微信：smartfish2018，如果你不想仅仅称为码农，以及程序员快速成长，建议关注扫下面二维码，关注公号“何俊林”，关注后，公号后台回复“666”，还可以获得程序员专属大礼包~">
+<meta property="og:description" content="相信不少使用ijkplayer的朋友，都在埋怨，很多issue没有人去解，master上分支已经停留在201801月，这现在一年都快过去了，官方不维护了么？其实，人家一直在维护和更新。只不过ijkplayer是基于FFmpeg作为内核。上层ijkplayer封装的东西，改动性没有那么大，出问题，也都是在底层FFmpeg改。如Demux，Codec等，还有各种协议。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/upload/wushuang.jpeg">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/10/18/16684dbf366d0f77?w=258&h=258&f=jpeg&s=28271">
+<meta property="og:updated_time" content="2019-03-31T13:07:15.109Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="逆流的鱼yuiop">
-<meta name="twitter:description" content="鱼哥，93后，目前在深圳已经上车，个人微信：smartfish2018，如果你不想仅仅称为码农，以及程序员快速成长，建议关注扫下面二维码，关注公号“何俊林”，关注后，公号后台回复“666”，还可以获得程序员专属大礼包~">
+<meta name="twitter:title" content="ijkplayer如何使用FFmpeg 4.0内核？">
+<meta name="twitter:description" content="相信不少使用ijkplayer的朋友，都在埋怨，很多issue没有人去解，master上分支已经停留在201801月，这现在一年都快过去了，官方不维护了么？其实，人家一直在维护和更新。只不过ijkplayer是基于FFmpeg作为内核。上层ijkplayer封装的东西，改动性没有那么大，出问题，也都是在底层FFmpeg改。如Demux，Codec等，还有各种协议。">
+<meta name="twitter:image" content="http://yoursite.com/upload/wushuang.jpeg">
 
 
 
@@ -132,13 +137,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2017/06/">
+  <link rel="canonical" href="http://yoursite.com/2019/03/31/ijkplayer如何使用FFmpeg-4-0内核？/">
 
 
 
 
 
-  <title>归档 | 逆流的鱼yuiop</title>
+  <title>ijkplayer如何使用FFmpeg 4.0内核？ | 逆流的鱼yuiop</title>
   
 
 
@@ -173,7 +178,7 @@
     
   
 
-  <div class="container sidebar-position-left  page-archive  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -267,169 +272,296 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
-      
-      
-      
-        
-      
-      嗯..! 目前共计 6 篇日志。 继续努力。
-    </span>
-
+  <div id="posts" class="posts-expand">
     
-
-      
-      
-      
-
-      
-        
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2017">2017</h2>
-        </div>
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/06/24/FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流/" itemprop="url">
-              
-                <span itemprop="name">FFmpeg总结（十一）用ffmpeg进行转格式，Android下播放网络音频流</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-06-24T17:44:43+08:00" content="2017-06-24">
-          06-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/06/24/FFmpeg总结（十二）用ffmpeg与nginx实现直播多路流并发播放/" itemprop="url">
-              
-                <span itemprop="name">FFmpeg总结（十二）用ffmpeg与nginx实现直播多路流并发播放</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-06-24T17:31:32+08:00" content="2017-06-24">
-          06-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/06/23/C-虚函数/" itemprop="url">
-              
-                <span itemprop="name">C++虚函数</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-06-23T17:52:45+08:00" content="2017-06-23">
-          06-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/06/23/Android-Multimedia框架总结（二十八）NuPlayer到OMX过程/" itemprop="url">
-              
-                <span itemprop="name">Android Multimedia框架总结（二十八）NuPlayer到OMX过程</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-06-23T17:36:06+08:00" content="2017-06-23">
-          06-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-  </section>
 
   
 
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/31/ijkplayer如何使用FFmpeg-4-0内核？/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="逆流的鱼yuiop">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/upload/fish.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="逆流的鱼yuiop">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ijkplayer如何使用FFmpeg 4.0内核？</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-31T21:02:54+08:00">
+                2019-03-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ijkplayer/" itemprop="url" rel="index">
+                    <span itemprop="name">ijkplayer</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/03/31/ijkplayer如何使用FFmpeg-4-0内核？/" class="leancloud_visitors" data-flag-title="ijkplayer如何使用FFmpeg 4.0内核？">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">热度 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+				 <span>℃</span>
+             </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">本文总阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  499
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  2
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <center><br><img src="/upload/wushuang.jpeg" alt="这里写图片描述"><br></center>
+
+<p>相信不少使用ijkplayer的朋友，都在埋怨，很多issue没有人去解，master上分支已经停留在201801月，这现在一年都快过去了，官方不维护了么？其实，人家一直在维护和更新。只不过ijkplayer是基于FFmpeg作为内核。上层ijkplayer封装的东西，改动性没有那么大，出问题，也都是在底层FFmpeg改。如Demux，Codec等，还有各种协议。<br><a id="more"></a><br>所以，我告诉大家如何用ijkplayer内核最新稳定版本。我们一定对它的工程结构了解，他们是怎么把FFmpeg，libyuv，soundtouch，等第三方库作为contrib的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">IJK_FFMPEG_UPSTREAM=https://github.com/Bilibili/FFmpeg.git</span><br><span class="line">IJK_FFMPEG_FORK=https://github.com/Bilibili/FFmpeg.git</span><br><span class="line">IJK_FFMPEG_COMMIT=ff3.4--ijk0.8.7--20180103--001</span><br><span class="line">IJK_FFMPEG_LOCAL_REPO=extra/ffmpeg</span><br><span class="line"></span><br><span class="line">set -e</span><br><span class="line">TOOLS=tools</span><br><span class="line"></span><br><span class="line">git --version</span><br><span class="line"></span><br><span class="line">echo &quot;== pull ffmpeg base ==&quot;</span><br><span class="line">sh $TOOLS/pull-repo-base.sh $IJK_FFMPEG_UPSTREAM $IJK_FFMPEG_LOCAL_REPO</span><br><span class="line"></span><br><span class="line">function pull_fork()</span><br><span class="line">&#123;</span><br><span class="line">    echo &quot;== pull ffmpeg fork $1 ==&quot;</span><br><span class="line">    sh $TOOLS/pull-repo-ref.sh $IJK_FFMPEG_FORK android/contrib/ffmpeg-$1 $&#123;IJK_FFMPEG_LOCAL_REPO&#125;</span><br><span class="line">    cd android/contrib/ffmpeg-$1</span><br><span class="line">    git checkout $&#123;IJK_FFMPEG_COMMIT&#125; -B ijkplayer</span><br><span class="line">    cd -</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里master上依赖的库是<code>ff3.4--ijk0.8.7--20180103--001</code>,是基于FFmpeg3.4的，新版本FFmpeg的都是4.1了，同时修复了很多问题和一些新的Feature。</p>
+<p>ijkplayer的维护者，也是一直在勤快的更新。</p>
+<p>所以要改动，只需要把IJK_FFMPEG_COMMIT=ff3.4–ijk0.8.7–20180103–001换成JK_FFMPEG_COMMIT=ff4.0–ijk0.8.25–20181123–001就可以，然后再做验证性测试。</p>
+<p>对于iOS也是，在init-ios.sh中</p>
+<pre><code>IJK_FFMPEG_UPSTREAM=https://github.com/Bilibili/FFmpeg.git
+IJK_FFMPEG_FORK=https://github.com/Bilibili/FFmpeg.git
+IJK_FFMPEG_COMMIT=ff3.4--ijk0.8.7--20180103--001
+IJK_FFMPEG_LOCAL_REPO=extra/ffmpeg
+
+IJK_GASP_UPSTREAM=https://github.com/Bilibili/gas-preprocessor.git
+
+# gas-preprocessor backup
+# https://github.com/Bilibili/gas-preprocessor.git
+
+if [ &quot;$IJK_FFMPEG_REPO_URL&quot; != &quot;&quot; ]; then
+    IJK_FFMPEG_UPSTREAM=$IJK_FFMPEG_REPO_URL
+    IJK_FFMPEG_FORK=$IJK_FFMPEG_REPO_URL
+fi
+
+if [ &quot;$IJK_GASP_REPO_URL&quot; != &quot;&quot; ]; then
+    IJK_GASP_UPSTREAM=$IJK_GASP_REPO_URL
+fi
+
+set -e
+TOOLS=tools
+</code></pre><p>也是改法和上面相同。其他第三方库libyuv，soundtouch，修改对应脚本就行。需要注意的是，编译时，如果有一些新旧接口变化，可以用对比工具对比下。升级的好处，可以规避很多问题。大家有兴趣可以试试。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/18/16684dbf366d0f77?w=258&amp;h=258&amp;f=jpeg&amp;s=28271" alt title="欢迎关注我的微信公众号「何俊林」，接收第一手技术干货"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/upload/wechat-qcode.jpg" alt="逆流的鱼yuiop wechat" style="width: 200px; max-width: 100%;">
+    <div>欢迎您扫一扫上面的微信公众号，第一时间关注我的博客！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/upload/wechat-reward-image.png" alt="逆流的鱼yuiop WeChat Pay">
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/upload/alipay-reward-image.jpg" alt="逆流的鱼yuiop Alipay">
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/FFmpeg/" rel="tag"><i class="fa fa-tag"></i> FFmpeg</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/02/H-264标准（三）F4V封装格式详解/" rel="next" title="H.264标准（三）F4V封装格式详解">
+                <i class="fa fa-chevron-left"></i> H.264标准（三）F4V封装格式详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
 
 
           </div>
@@ -437,6 +569,12 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTIwNC81Nzcx"></div>
+    
+  </div>
+
 
         </div>
         
@@ -696,11 +834,9 @@
   
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
 
 
   
@@ -736,6 +872,17 @@
 
 
 
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
   
 
 
